@@ -1,0 +1,15 @@
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/BankAccount
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/BankAccount.deps.json
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/BankAccount.runtimeconfig.json
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/BankAccount.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/ref/BankAccount.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/bin/Debug/net6.0/BankAccount.pdb
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.csproj.AssemblyReference.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.GeneratedMSBuildEditorConfig.editorconfig
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.AssemblyInfoInputs.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.AssemblyInfo.cs
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.csproj.CoreCompileInputs.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/ref/BankAccount.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.pdb
+/home/hvz/Dokumentumok/CodeCool/projektek/3-Object-Oriented-Programming/1st-SI-Week/BankAccount/BankAccount/obj/Debug/net6.0/BankAccount.genruntimeconfig.cache
