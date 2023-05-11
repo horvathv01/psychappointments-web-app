@@ -1,0 +1,15 @@
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/MelaIdopontok
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/MelaIdopontok.deps.json
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/MelaIdopontok.runtimeconfig.json
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/MelaIdopontok.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/ref/MelaIdopontok.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/bin/Debug/net6.0/MelaIdopontok.pdb
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.csproj.AssemblyReference.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.GeneratedMSBuildEditorConfig.editorconfig
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.AssemblyInfoInputs.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.AssemblyInfo.cs
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.csproj.CoreCompileInputs.cache
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/ref/MelaIdopontok.dll
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.pdb
+/home/hvz/Dokumentumok/CodeCool/projektek/PET-PROJEKTEK/MelaIdopontok/MelaIdopontok/obj/Debug/net6.0/MelaIdopontok.genruntimeconfig.cache
