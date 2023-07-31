@@ -4,58 +4,22 @@ namespace MelaIdopontok.Models;
 
 public class Slot
 {
-    public DateTime Start { get; }
-    public DateTime End { get; }
-    public bool Taken { get; private set; }
-    public bool Pending { get; private set; }
-    public Session? Session { get; set; }
+    public int Id;
+    public Psychologist Psychologist;
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
+    public List<Session> Sessions { get; set; }
+    public double RoomPrice { get; set; }
 
-    public static int ID = 0;
-    
-    public int RoomPrice { get; private set; }
-
-    public Slot(DateTime start, int length, int roomPrice, bool taken = false, bool pending = false, Session? session = null)
+    public Slot(int id, Psychologist psychologist, DateTime start, int length, double roomPrice, List<Session>? sessions = null)
     {
-        this.Start = start;
+        Id = id;
+        Psychologist = psychologist;
+        Start = start;
         End = start.AddMinutes(length);
-        this.Taken = taken;
-        this.Pending = pending;
-        this.Session = session;
-        this.RoomPrice = roomPrice;
-        ID++;
+        Sessions = sessions ?? new List<Session>();
+        RoomPrice = roomPrice;
     }
-
-    public void SetPending(bool input)
-    {
-        Pending = input;
-        if (Pending)
-        {
-            Console.WriteLine($"Slot number {ID}'s status is pending");
-        }
-        else
-        {
-            Console.WriteLine($"Slot number {ID}'s status is not pending");
-        }
-    }
-
-    public void SetTaken(bool input)
-    {
-        Taken = input;
-        if (Pending)
-        {
-            Console.WriteLine($"Slot number {ID}'s status is TAKEN, pending: {Pending}");
-        }
-        else
-        {
-            Console.WriteLine($"Slot number {ID}'s status is NOT TAKEN, pending: {Pending}");
-        }
-    }
-
-    public void SetRoomPrice(int price)
-    {
-        RoomPrice = price;
-    }
-
 
     public override bool Equals(object? obj)
     {
