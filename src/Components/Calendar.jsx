@@ -8,15 +8,9 @@ export default function Calendar(){
     let configObj = {
         //viewType: "Week",
         viewType: "Resources",
+        startDate: getMonday(new Date()),
         durationBarVisible: false,
-        columns: [
-            { name: "Hétfő", id: "A"},
-            { name: "Kedd", id: "B" },
-            { name: "Szerda", id: "C" },
-            { name: "Csütörtök", id: "D" },
-            { name: "Péntek", id: "E" },
-            { name: "Szombat", id: "F" },
-            { name: "Vasárnap", id: "G" },]
+        columns: generateCalendarHeader(getMonday(new Date()))
       };
 
     const [config, setConfig] = useState(configObj);
@@ -24,28 +18,13 @@ export default function Calendar(){
       const calendarRef = useRef();
   
       const handleTimeRangeSelected = args => {
+        const newConfigObj = {...configObj};
         calendarRef.current.control.update({
-          startDate: args.day
+          startDate: getMonday(args.day)
         });
-        console.log("this is info:");
-        console.log(calendarRef.current.control.startDate);
-        console.log("and one week to that is:");
-        let numToAdd = -1;
-        const columns = configObj.columns.map(day => {
-            numToAdd += 1;
-            return {
-            name: (day.name + "\n" + addDays(calendarRef.current.control.startDate, numToAdd)),
-            id: numToAdd
-        }
-    }); 
  
-        configObj.columns = columns;
-        console.log(configObj.columns);
-        setConfig(configObj);
-        //const newDate = (calendarRef.current.control.startDate).addDays(7);
-        //console.log(newDate);
-        //console.log(addDays(calendarRef.current.control.startDate, 7));
-        
+        newConfigObj.columns = generateCalendarHeader(getMonday(calendarRef.current.control.startDate));
+        setConfig(newConfigObj);        
       }
 
     return(
@@ -76,9 +55,41 @@ const styles = {
     }
   };
 
-  function addDays(date, num){
-    const newDate = date.addDays(num);
-    let stringDate = newDate.toString();
-    stringDate = stringDate.replaceAll("-", " ");
-    return stringDate.slice(0, 10);
+  function addDaysToDate(date, num, months){
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + num);
+    console.log(newDate);
+    const day = newDate.getDate();
+    const month = months[newDate.getMonth()];
+    return `${month} ${day}.`;
+  }
+
+  function getMonday(input){
+    const date = new Date(input);
+    const monday = new Date(
+      date.setDate(date.getDate() - date.getDay() + 1),
+    );
+    console.log(monday);
+    return monday;
+  }
+
+  function generateCalendarHeader(startDate){
+    let columns = [
+      { name: "Hétfő", id: "1"},
+      { name: "Kedd", id: "2" },
+      { name: "Szerda", id: "3" },
+      { name: "Csütörtök", id: "4" },
+      { name: "Péntek", id: "5" },
+      { name: "Szombat", id: "6" },
+      { name: "Vasárnap", id: "7" }]
+
+    let months = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"];
+
+   return columns.map(day => {
+        const id = parseInt(day.id) - 1;
+        return {
+        name: (day.name + "\n" + addDaysToDate(startDate, id, months)),
+        id: id
+    }
+})
   }
