@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from "react";
-import { DayPilotCalendar, DayPilotNavigator } from "@daypilot/daypilot-lite-react";
+import { DayPilotCalendar, DayPilotNavigator, DayPilot } from "@daypilot/daypilot-lite-react";
 
 //here is how to use DayPilot calendar component:
 //https://code.daypilot.org/42221/react-weekly-calendar-tutorial
 
-export default function Calendar(){
-    let configObj = {
+export default function CalendarV01(){
+    const configObj = {
         //viewType: "Week",
         viewType: "Resources",
         startDate: getMonday(new Date()),
@@ -13,31 +13,71 @@ export default function Calendar(){
         columns: generateCalendarHeader(getMonday(new Date()))
       };
 
-    const [config, setConfig] = useState(configObj);
+    const navConfigObj = {
+      selectMode: "Week",
+      weekStarts: 1,
+      //selectionStart: configObj.startDate
+      //skipMonths: 3,
+      //onTimeRangeSelected: handleTimeRangeSelected,
+      //ref: navigatorRef
+    };
+
+    
+    
       
       const calendarRef = useRef();
+      const navigatorRef = useRef();
   
+      const [config, setConfig] = useState(configObj);
+      const [navConfig, setNavConfig] = useState(navConfigObj);
+
       const handleTimeRangeSelected = args => {
-        const newConfigObj = {...configObj};
-        calendarRef.current.control.update({
-          startDate: getMonday(args.day)
-        });
- 
+        console.log(args);
+        const newConfigObj = {...config};
+                
+        newConfigObj.startDate = getMonday(args.day);
         newConfigObj.columns = generateCalendarHeader(getMonday(calendarRef.current.control.startDate));
         setConfig(newConfigObj);        
+      }
+
+      const goToToday = () => {
+        let newConfigObj = {...config};
+        const monday = getMonday(new Date());
+        const sunday = new Date(monday);
+        sunday.setDate(sunday.getDate() + 6);
+        newConfigObj.startDate = monday;
+        newConfigObj.columns = generateCalendarHeader(monday);
+
+        
+        console.log(navigatorRef.current.control);
+        let newNavConfig = {...navConfig};
+        newNavConfig.selectionStart = new DayPilot.Date(monday);
+        newNavConfig.selectionEnd = new DayPilot.Date(sunday);
+        // navigatorRef.current.control.update({
+        // selectionStart: new DayPilot.Date(monday),
+        // selectionEnd: new DayPilot.Date(sunday)
+        // })
+
+        //setNavConfig(newNavConfig);
+        setConfig(newConfigObj);
       }
 
     return(
         <div style={styles.wrap}>
             <div style={styles.left}>
                 <DayPilotNavigator
-                    selectMode={"Week"}
-                    //skipMonths={3}
+                    {...navConfig}
                     onTimeRangeSelected={handleTimeRangeSelected}
+                    ref={navigatorRef}
                 />
             </div>
+            <button onClick={goToToday}>Jump to today</button>
             <div style={styles.main}>
-                <DayPilotCalendar {...config} ref={calendarRef} />
+                <DayPilotCalendar 
+                {...config} 
+                ref={calendarRef} 
+                
+                />
             </div>
         </div>
     );
@@ -58,7 +98,6 @@ const styles = {
   function addDaysToDate(date, num, months){
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + num);
-    console.log(newDate);
     const day = newDate.getDate();
     const month = months[newDate.getMonth()];
     return `${month} ${day}.`;
@@ -69,7 +108,6 @@ const styles = {
     const monday = new Date(
       date.setDate(date.getDate() - date.getDay() + 1),
     );
-    console.log(monday);
     return monday;
   }
 
