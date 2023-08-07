@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 
 export const UserProvider = ({children}) => {
 const [user, setUser] = useState(null);
@@ -14,8 +14,13 @@ const logout = () => {
     setUser(null);
 };
 
+const readSessionStorage = () => {
+    //if page reloads and context user is empty
+    return;
+};
+
 return (
-    <UserContext.Provider value={{user, login, logout}}>
+    <UserContext.Provider value={{user, login, logout, readSessionStorage}}>
         {children}
     </UserContext.Provider>
 );
