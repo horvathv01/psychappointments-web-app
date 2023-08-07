@@ -7,7 +7,7 @@ import ServerUrlAndPort from '../ServerURLAndPort.js';
 
 export default function NavBar(){
 
-    const {user, login, logout, readSessionStorage} = useContext(UserContext);
+    const {user, login, logout, retreiveUser} = useContext(UserContext);
     const navigate = useNavigate();
 
 
@@ -30,15 +30,15 @@ export default function NavBar(){
             </Navbar.Brand>
             <Navbar.Text>{user && user.username}</Navbar.Text>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            {user && user.name ? <p>Hello, {user.name}! <br> User type: {user.type}</br></p> : <p></p>}
+            {retreiveUser() && user.name ? <p>Hello, {user.name}! <br> User type: {user.type}</br></p> : null}
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto">
-                {user == null ?? <Nav.Link href="/login">Log In</Nav.Link>}
+                {user == null ? <Nav.Link href="/login">Log In</Nav.Link> : null}
                 <Nav.Link href="/calendar">Event Calendar</Nav.Link>
                 <Nav.Link href="/locations">Locations</Nav.Link>
                 <Nav.Link href="/financials">Financials</Nav.Link>
-                {user && user.type === "admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
-                {user && user.type === "manager" ? <Nav.Link href="/manager">Management</Nav.Link> : null}
+                {retreiveUser() && user.type === "admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
+                {retreiveUser() && user.type === "manager" ? <Nav.Link href="/manager">Management</Nav.Link> : null}
                 <span className={`nav-link ${isOnline() ? 'text-success' : 'text-danger'}`}>
                   {isOnline() ? 'Online' : 'Offline'}
                 </span>
