@@ -25,6 +25,7 @@ const retreiveUser = () => {
     if(storedUserString != null){
         const storedUser = JSON.parse(storedUserString);
         setUser(storedUser);
+        console.log("User successfully retreived from sessionStorage");
     } else {
         console.log("User could not be retreived from sessionStorage");
         return null;

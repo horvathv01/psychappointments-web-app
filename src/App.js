@@ -7,6 +7,7 @@ import LoginPage from './Components/LoginPage';
 import StarterPage from './Components/StarterPage';
 import Error from './Components/Error';
 import AddAppointment from './Components/AddAppointment';
+import LoginFirst from './Components/LoginFirst';
 
 function App() {
   
@@ -21,6 +22,7 @@ function App() {
 
               <Route path="/" element={<StarterPage />}/>
               <Route path="/login" element={<LoginPage/>}/>
+              <Route path="/loginfirst" element={<LoginFirst/>}/>
               <Route path="/registration" element={<p>registration page</p>}/>
               <Route path="/error" element={<Error />}/>
 

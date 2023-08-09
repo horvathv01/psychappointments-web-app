@@ -10,7 +10,12 @@ export default function MainPage(){
     const navigate = useNavigate();
     
     useEffect(() => {
-        setUser(retreiveUser());
+        if(user == null){
+            const retreivedUser = retreiveUser();
+            if(retreivedUser != null){
+                setUser(retreiveUser());
+            }
+        }
     }, []);
     
 

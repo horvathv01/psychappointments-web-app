@@ -16,26 +16,21 @@ export default function AddAppointment(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        redirectToLogin();
-        setUser(retreiveUser());
-        if(user != null && user.type !== "psychologist"){
-            //fetch all psychologists (name and id?)
-            //setAllPsychologists(fetchedData)
+        if (user == null) {
+            //navigate("/loginfirst");
         }
     }, []);
 
     function redirectToLogin(){
-        if(user == null){
             window.alert("Please log in first!");
             navigate("/login");
-        }
-    }
+    };
 
     function handleSubmit(){
         //validate data --> same as registration validator?
         //what to include? 
         //psychologist.id + psychologist.name? --> to track changes of id in future
-        //client's data --> if existing: from DB, else: register new client account with default password
+        //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
         //location id (+ location name?)
         //session start, session end
         //session description
@@ -45,8 +40,13 @@ export default function AddAppointment(){
 
     function getLocations(){
         let locations = [];
-        //fetch available locations
-        
+        if(user != null && (user.type == "psychologist" || user.type == "manager")){
+        //only fetch associated locations
+        //setAllPsychologists(fetchedData)
+        }
+        //fetch all locations
+        //setAllPsychologists(fetchedData)
+
         return(
             <div>
                 <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
@@ -106,60 +106,96 @@ export default function AddAppointment(){
     function parseAddress(input){
         let address = {
             country: "",
-            zip: 0,
+            zip: "",
             city: "",
             street: "",
             rest: ""
         }
-        //code to parse
-
+        if(input != undefined){
+            //code to parse
+        }
+            //empty address can still be returned so that object structure can still be used
         return address;
     }
 
     function generateClientDataFields(){
+
+        const clientFormFields = {
+            name: {label: "name", type: "text", required: true},
+            email: {label: "email", type: "text", required: true},
+            phone: {label: "phone", type: "phone", required: true},
+            dateOfBirth: {label: "dateofbirth", type: "date", required: true}
+        }
+
         if(user != null && user.type == "client"){
             setClient(user);
-            const address = parseAddress(user.address);
-            return(
+        };
+        
+        const address = client != null ? parseAddress(client.address) : parseAddress();
+
+        return(
+            <div>
+            {
+                Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
+                    return(
+                    <div key={fieldName}>
+                        <label htmlFor={fieldName}>{fieldProps.label}:</label>
+                        <input
+                        required={fieldProps.required}
+                        className="input-field" 
+                        id={fieldName}
+                        type={fieldProps.type}
+                        name={fieldName}
+                        defaultValue={user?.type === "client" ? client[fieldName] : ""}
+                        />
+                    </div>)
+                })
+            }
                 <div>
-                <label htmlFor="name">Name: </label>
-                <input type="text" name="name" required>{user.name}</input>
-                <label htmlFor="email">Email: </label>
-                <input type="text" name="email" required>{user.email}</input>
-                <label htmlFor="dateofbirth">Date of birth: </label>
-                <input type="date" name="dateofbirth">{user.dateofbirth}</input>
-                <p>Address:</p>
-                <label htmlFor="city">Country</label>
-                <input required type="text" id="country" name="country" autoComplete="country" enterKeyHint="next">{address.country}</input>
-                <label htmlFor="postal-code">ZIP or postal code</label>
-                <input className="postal-code" id="postal-code" name="postal-code" autoComplete="postal-code" enterKeyHint="next">{address.zip}</input>
-                <label htmlFor="city">City</label>
-                <input required type="text" id="city" name="city" autoComplete="address-level2" enterKeyHint="next">{address.city}</input>
-                <label htmlFor="street-address">Street address</label>
-                <input type="text" id="street-address" name="street-address" autoComplete="street-address" required enterKeyHint="next">{address.street + " " + address.rest}</input>
-        </div>
-            );
-        } else {
-            return(
-                <div>
-                    <label htmlFor="name">Name: </label>
-                    <input type="text" name="name" required></input>
-                    <label htmlFor="email">Email: </label>
-                    <input type="text" name="email" required></input>
-                    <label htmlFor="dateofbirth">Date of birth: </label>
-                    <input type="date" name="dateofbirth" required></input>
                     <p>Address:</p>
                     <label htmlFor="city">Country</label>
-                    <input required type="text" id="city" name="city" autoComplete="country" enterKeyHint="next"></input>
+                    <input 
+                    required 
+                    className="input-field" 
+                    type="text" 
+                    id="country" 
+                    name="country" 
+                    autoComplete="country" 
+                    enterKeyHint="next" 
+                    defaultValue={address.country}></input>
                     <label htmlFor="postal-code">ZIP or postal code</label>
-                    <input className="postal-code" id="postal-code" name="postal-code" autoComplete="postal-code" enterKeyHint="next"></input>
+                    <input
+                    required
+                    className="input-field" 
+                    id="postal-code" 
+                    type="text"
+                    name="postal-code" 
+                    autoComplete="postal-code" 
+                    enterKeyHint="next" 
+                    defaultValue={address.zip}></input>
                     <label htmlFor="city">City</label>
-                    <input required type="text" id="city" name="city" autoComplete="address-level2" enterKeyHint="next"></input>
+                    <input 
+                    required
+                    className="input-field" 
+                    id="city" 
+                    type="text" 
+                    name="city" 
+                    autoComplete="address-level2" 
+                    enterKeyHint="next" 
+                    defaultValue={address.city}></input>
                     <label htmlFor="street-address">Street address</label>
-                    <input type="text" id="street-address" name="street-address" autoComplete="street-address" required enterKeyHint="next"></input>
+                    <input 
+                    required 
+                    className="input-field" 
+                    id="street-address" 
+                    type="text" 
+                    name="street-address" 
+                    autoComplete="street-address" 
+                    enterKeyHint="next" 
+                    defaultValue={address.street + " " + address.rest}></input>
+                </div>
             </div>
-            );
-        };
+        )
     };
 
     //choose location first --> fetch psychologists available at location
@@ -182,10 +218,11 @@ export default function AddAppointment(){
                     {generatePsychologistDataField()}
                     <p>Client: </p>
                     {generateClientDataFields()}
-                    <p>Select time slot htmlFor session: </p>
+                    <p>Select time slot for session: </p>
                     {getAvailableTimeSlots()}
                     <p>Please describe the problem briefly!</p>
                     <input type="textarea" onChange={(e) => setDescription(e.target.value)} required></input>
+                    <input type="submit" value="Submit"></input>
                 </form>
             </div>
         </div>
