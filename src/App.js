@@ -5,6 +5,8 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './Components/LoginPage';
 import StarterPage from './Components/StarterPage';
+import Error from './Components/Error';
+import AddAppointment from './Components/AddAppointment';
 
 function App() {
   
@@ -20,6 +22,8 @@ function App() {
               <Route path="/" element={<StarterPage />}/>
               <Route path="/login" element={<LoginPage/>}/>
               <Route path="/registration" element={<p>registration page</p>}/>
+              <Route path="/error" element={<Error />}/>
+
               <Route path="/calendar" element={<MainPage/>}/>
               
               <Route path="/locations" element={null}/>
@@ -31,6 +35,7 @@ function App() {
               <Route path="/profile/myappointments" element={null}/>
               <Route path="/profile/myclients" element={null}/>
 
+              <Route path="/addappointment" element={<AddAppointment />}/>
             </Routes>
           </UserProvider>
         </BrowserRouter>
