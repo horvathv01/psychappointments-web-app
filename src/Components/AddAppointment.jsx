@@ -4,8 +4,7 @@ import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 
 export default function AddAppointment(){
-    const {retreiveUser} = useContext(UserContext);
-    const [user, setUser] = useState(null);
+    const {user, retreiveUser} = useContext(UserContext);
     const [client, setClient] = useState(null); //--> registered client htmlFor appointment
     const [psychologist, setPsychologist] = useState(null); //--> registered psych. htmlFor appointment
     const [location, setLocation] = useState(null); //--> registered location htmlFor appointment
@@ -17,14 +16,9 @@ export default function AddAppointment(){
 
     useEffect(() => {
         if (user == null) {
-            //navigate("/loginfirst");
+            navigate("/loginfirst");
         }
     }, []);
-
-    function redirectToLogin(){
-            window.alert("Please log in first!");
-            navigate("/login");
-    };
 
     function handleSubmit(){
         //validate data --> same as registration validator?
