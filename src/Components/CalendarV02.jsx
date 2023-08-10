@@ -1,15 +1,16 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css'; // Import the default calendar styles
 import './CalendarV02.css'; // Import your custom CSS file
+import { DateContext } from "../DateContext";
 import events from "../Resources/events";
 
 //moment.tz.setDefault("Europe");
 
 const localizer = momentLocalizer(moment);
 
-Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
+
 const culture = {
   week: "Hét",
   work_week: "Munkahét",
@@ -23,7 +24,7 @@ const culture = {
 //console.log(localizer);
 
 
-export default function CalendarV02() {
+export default function CalendarV02({events}) {
   const newEvents = [{
     id: 0,
     title: "Trial 1",
@@ -45,9 +46,55 @@ export default function CalendarV02() {
   }
 ];
 
-  const [eventsList, setEventsList] = useState(newEvents);
+Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
 
-  console.log(eventsList);
+  const [eventsList, setEventsList] = useState(events == undefined ? newEvents : events);
+  const {
+    startDate, 
+    setStartDate, 
+    endDate, 
+    setEndDate, 
+    view, 
+    setView, 
+    getMonday, 
+    getSunday, 
+    getFirstDayOfMonth, 
+    getEndOfMonth
+  } = useContext(DateContext); 
+
+  useEffect(() => {
+    console.log("start: " + startDate);
+    console.log("end: " + endDate);
+    console.log("view: " + view);
+  }, [startDate, endDate, view])
+
+  function handleNavigate(event){
+    if(view == "week"){
+      const monday = getMonday(event);
+      setStartDate(monday);
+      setEndDate(getSunday(monday));
+    } else {
+      const firstDay = getFirstDayOfMonth(event);
+      setStartDate(firstDay);
+      setEndDate(getEndOfMonth(firstDay));
+    }
+  }
+
+  function handleViewChange(event){
+    console.log(event);
+    setView(event);
+    if(event == "week"){
+      let newStartDate = new Date(startDate);
+      newStartDate.setDate(newStartDate.getDate() + (new Date().getDate() - 1));
+      const monday = getMonday(newStartDate);
+      setStartDate(monday);
+      setEndDate(getSunday(monday));
+    } else {
+      const firstDay = getFirstDayOfMonth(startDate);
+      setStartDate(firstDay);
+      setEndDate(getEndOfMonth(firstDay));
+    }
+  }
 
   // {
   //   id: 12,
@@ -65,6 +112,9 @@ export default function CalendarV02() {
         startAccessor="start"
         endAccessor="end"
         defaultView="week"
+        defaultDate={startDate}
+        onNavigate={(e) => handleNavigate(e)}
+        onView={(e) => handleViewChange(e)}
         //culture={culture}
       />
     </div>

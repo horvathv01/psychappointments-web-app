@@ -1,6 +1,7 @@
 import './App.css';
 import MainPage from './Components/MainPage';
 import { UserProvider } from './Components/UserProvider';
+import { DateProvider } from './Components/DateProvider';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from './Components/LoginPage';
@@ -8,16 +9,17 @@ import StarterPage from './Components/StarterPage';
 import Error from './Components/Error';
 import AddAppointment from './Components/AddAppointment';
 import LoginFirst from './Components/LoginFirst';
+import Locations from './Components/Locations';
 
 function App() {
-  
-
 
   return (
     <div className="App">
       
         <BrowserRouter>
           <UserProvider>
+            <DateProvider>
+            
             <Routes>
 
               <Route path="/" element={<StarterPage />}/>
@@ -28,7 +30,7 @@ function App() {
 
               <Route path="/calendar" element={<MainPage/>}/>
               
-              <Route path="/locations" element={null}/>
+              <Route path="/locations" element={<Locations />}/>
               <Route path="/financials" element={null}/>
               <Route path="/admin" element={null}/>
               <Route path="/manager" element={null}/>
@@ -39,6 +41,7 @@ function App() {
 
               <Route path="/addappointment" element={<AddAppointment />}/>
             </Routes>
+            </DateProvider>
           </UserProvider>
         </BrowserRouter>
       
