@@ -36,8 +36,8 @@ function App() {
               <Route path="/manager" element={null}/>
               
               <Route path="/profile" element={null}/>
-              <Route path="/profile/myappointments" element={null}/>
-              <Route path="/profile/myclients" element={null}/>
+              <Route path="/profile/appointments" element={null}/>
+              <Route path="/profile/clients" element={null}/>
 
               <Route path="/addappointment" element={<AddAppointment />}/>
             </Routes>
