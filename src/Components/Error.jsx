@@ -7,9 +7,6 @@ export default function Error(){
     return(
         <div>
             <div>
-                <NavBar />
-            </div>
-            <div>
                 <h1>Something went wrong.</h1>
                 <button onClick={() => navigate(-1)}>Back</button>
             </div>

@@ -10,40 +10,43 @@ import Error from './Components/Error';
 import AddAppointment from './Components/AddAppointment';
 import LoginFirst from './Components/LoginFirst';
 import Locations from './Components/Locations';
+import Layout from './Components/Layout';
 
 function App() {
 
   return (
     <div className="App">
       
-        <BrowserRouter>
-          <UserProvider>
-            <DateProvider>
-            
-            <Routes>
+      <BrowserRouter>
+        <UserProvider>
+          <DateProvider>
+            <Layout>
 
-              <Route path="/" element={<StarterPage />}/>
-              <Route path="/login" element={<LoginPage/>}/>
-              <Route path="/loginfirst" element={<LoginFirst/>}/>
-              <Route path="/registration" element={<p>registration page</p>}/>
-              <Route path="/error" element={<Error />}/>
+              <Routes>
 
-              <Route path="/calendar" element={<MainPage/>}/>
-              
-              <Route path="/locations" element={<Locations />}/>
-              <Route path="/financials" element={null}/>
-              <Route path="/admin" element={null}/>
-              <Route path="/manager" element={null}/>
-              
-              <Route path="/profile" element={null}/>
-              <Route path="/profile/myappointments" element={null}/>
-              <Route path="/profile/myclients" element={null}/>
+                <Route path="/" element={<StarterPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/loginfirst" element={<LoginFirst />} />
+                <Route path="/registration" element={<p>registration page</p>} />
+                <Route path="/error" element={<Error />} />
 
-              <Route path="/addappointment" element={<AddAppointment />}/>
-            </Routes>
-            </DateProvider>
-          </UserProvider>
-        </BrowserRouter>
+                <Route path="/calendar" element={<MainPage />} />
+
+                <Route path="/locations" element={<Locations />} />
+                <Route path="/financials" element={null} />
+                <Route path="/admin" element={null} />
+                <Route path="/manager" element={null} />
+
+                <Route path="/profile" element={null} />
+                <Route path="/profile/myappointments" element={null} />
+                <Route path="/profile/myclients" element={null} />
+
+                <Route path="/addappointment" element={<AddAppointment />} />
+              </Routes>
+            </Layout>
+          </DateProvider>
+        </UserProvider>
+      </BrowserRouter>
       
     </div>
   );

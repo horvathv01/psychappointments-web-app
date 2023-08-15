@@ -44,9 +44,6 @@ export default function LoginPage(){
 
     return(
         <div>
-      <div>
-        <NavBar />
-      </div>
       <div className="m-3 text-center">
         <Form>
           <Row className="mb-3 justify-content-center">
