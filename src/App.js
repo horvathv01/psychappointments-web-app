@@ -16,7 +16,6 @@ function App() {
 
   return (
     <div className="App">
-      
       <BrowserRouter>
         <UserProvider>
           <DateProvider>
@@ -46,8 +45,7 @@ function App() {
             </Layout>
           </DateProvider>
         </UserProvider>
-      </BrowserRouter>
-      
+      </BrowserRouter>      
     </div>
   );
 }

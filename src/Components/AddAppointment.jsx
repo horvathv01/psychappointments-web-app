@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddAppointment(){
     const {user, retreiveUser} = useContext(UserContext);
-    const [client, setClient] = useState(null); //--> registered client htmlFor appointment
-    const [psychologist, setPsychologist] = useState(null); //--> registered psych. htmlFor appointment
-    const [location, setLocation] = useState(null); //--> registered location htmlFor appointment
-    const [sessionStart, setSessionStart] = useState(null); //--> registered session start htmlFor appointment
-    const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end htmlFor appointment
-    const [description, setDescription] = useState(""); //--> registered session description htmlFor appointment
+    const [client, setClient] = useState(null); //--> registered client for appointment
+    const [psychologist, setPsychologist] = useState(null); //--> registered psych. for appointment
+    const [location, setLocation] = useState(null); //--> registered location for appointment
+    const [sessionStart, setSessionStart] = useState(null); //--> registered session start for appointment
+    const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end for appointment
+    const [description, setDescription] = useState(""); //--> registered session description for appointment
+    const [frequency, setFrequency] = useState("weekly"); //--> registered frequency for appointment
     const [allPsychologists, setAllPsychologists] = useState([]);
     const navigate = useNavigate();
 
@@ -27,9 +28,13 @@ export default function AddAppointment(){
         //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
         //location id (+ location name?)
         //session start, session end
+        //frequency of session
         //session description
         //time of appointment addition + data of person who added it
         //fetch POST to add appointment
+
+        //if session collides with future scheduled sessions but is fine this time, respond with warning
+        //if session is scheduled for unfit time (collides with another one): respond with nope (hacker protection)
     }
 
     function getLocations(){
@@ -49,6 +54,10 @@ export default function AddAppointment(){
                 </select>
             </div>
         )
+    }
+
+    function handleFrequencyChange(freq){
+        setFrequency(freq);
     }
 
     function handleLocationChange(location){
@@ -211,6 +220,13 @@ export default function AddAppointment(){
                     {generateClientDataFields()}
                     <p>Select time slot for session: </p>
                     {getAvailableTimeSlots()}
+                    <p>Recurring session?</p>
+                    <select onChange={(e) => handleFrequencyChange(e.target.value)} defaultValue="weekly">
+                        <option value="weekly">Weekly</option>
+                        <option value="2week">Bi-weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="none">None (only one session)</option>
+                    </select>
                     <p>Please describe the problem briefly!</p>
                     <input type="textarea" onChange={(e) => setDescription(e.target.value)} required></input>
                     <input type="submit" value="Submit"></input>
