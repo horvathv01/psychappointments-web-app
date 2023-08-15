@@ -26,9 +26,6 @@ export default function MainPage(){
 
     return(
         <div>
-            <div>
-                <NavBar />
-            </div>
             <h1>Your Events</h1>
             {user != null && user.type == "psychologist" ? <button onClick={() => navigate("/addappointment")}>Add Appointment</button> : null}
             <CalendarV02 />

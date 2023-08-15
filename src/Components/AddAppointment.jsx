@@ -211,9 +211,6 @@ export default function AddAppointment(){
     return(
         <div>
             <div>
-                <NavBar />
-            </div>
-            <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
                     {getLocations()}

@@ -58,9 +58,6 @@ export default function Locations(){
     return(
         <div>
             <div>
-                <NavBar />
-            </div>
-            <div>
                 {getLocations()}
             </div>
             <div>
