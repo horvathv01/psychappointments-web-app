@@ -11,6 +11,7 @@ import AddAppointment from './Components/AddAppointment';
 import LoginFirst from './Components/LoginFirst';
 import Locations from './Components/Locations';
 import Layout from './Components/Layout';
+import Financials from './Components/Financials';
 
 function App() {
 
@@ -32,7 +33,7 @@ function App() {
                 <Route path="/calendar" element={<MainPage />} />
 
                 <Route path="/locations" element={<Locations />} />
-                <Route path="/financials" element={null} />
+                <Route path="/financials" element={< Financials/>} />
                 <Route path="/admin" element={null} />
                 <Route path="/manager" element={null} />
 
