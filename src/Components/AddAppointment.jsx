@@ -16,10 +16,18 @@ export default function AddAppointment(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user == null) {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
             navigate("/loginfirst");
         }
-    }, []);
+        if(retreivedUser.type == "psychologist"){
+            setPsychologist(retreivedUser);
+        } else if (retreivedUser.type == "client"){
+            setClient(retreivedUser);
+        }
+
+    }, [user, client]);
+
 
     function handleSubmit(){
         //validate data --> same as registration validator?
@@ -91,10 +99,9 @@ export default function AddAppointment(){
     }
 
     function generatePsychologistDataField(){
-        if(user != null && user.type == "psychologist"){
-            setPsychologist(user);
+        if(psychologist != null){
             return(
-                <p>{user.name}</p>
+                <p>{psychologist.name}</p>
             );
         } else {
             return(
@@ -115,45 +122,48 @@ export default function AddAppointment(){
             rest: ""
         }
         if(input != undefined){
-            //code to parse
+            return input;
         }
             //empty address can still be returned so that object structure can still be used
         return address;
     }
 
-    function generateClientDataFields(){
-
+    function generateClientDataFields() {
         const clientFormFields = {
-            name: {label: "name", type: "text", required: true},
-            email: {label: "email", type: "text", required: true},
-            phone: {label: "phone", type: "phone", required: true},
-            dateOfBirth: {label: "dateofbirth", type: "date", required: true}
-        }
-
-        if(user != null && user.type == "client"){
-            setClient(user);
+          name: { label: "name", type: "text", required: true },
+          email: { label: "email", type: "text", required: true },
+          phone: { label: "phone", type: "phone", required: true },
+          dateOfBirth: { label: "dateofbirth", type: "date", required: true }
         };
-        
+      
         const address = client != null ? parseAddress(client.address) : parseAddress();
-
-        return(
-            <div>
-            {
-                Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
-                    return(
-                    <div key={fieldName}>
-                        <label htmlFor={fieldName}>{fieldProps.label}:</label>
-                        <input
-                        required={fieldProps.required}
-                        className="input-field" 
-                        id={fieldName}
-                        type={fieldProps.type}
-                        name={fieldName}
-                        defaultValue={user?.type === "client" ? client[fieldName] : ""}
-                        />
-                    </div>)
-                })
-            }
+      
+        const defaultValues = Object.fromEntries(
+          Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
+            return [
+              fieldName,
+              user && user.type === "client" && client ? client[fieldProps.label] : ""
+            ];
+          })
+        );
+      
+        return (
+          <div>
+            {Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
+              return (
+                <div key={fieldName}>
+                  <label htmlFor={fieldName}>{fieldProps.label}:</label>
+                  <input
+                    required={fieldProps.required}
+                    className="input-field"
+                    id={fieldName}
+                    type={fieldProps.type}
+                    name={fieldName}
+                    defaultValue={defaultValues[fieldName]}
+                  />
+                </div>
+              );
+            })}
                 <div>
                     <p>Address:</p>
                     <label htmlFor="city">Country</label>
@@ -217,7 +227,7 @@ export default function AddAppointment(){
                     <p>Psychologist: </p>
                     {generatePsychologistDataField()}
                     <p>Client: </p>
-                    {generateClientDataFields()}
+                    {user && generateClientDataFields()}
                     <p>Select time slot for session: </p>
                     {getAvailableTimeSlots()}
                     <p>Recurring session?</p>

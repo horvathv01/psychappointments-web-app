@@ -13,9 +13,13 @@ export default function Locations(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user == null) {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
             navigate("/loginfirst");
         }
+    }, [user]);
+
+    useEffect(() => {
         if(location){
             let allEvents = [];
             //fetch all events for current week for this location

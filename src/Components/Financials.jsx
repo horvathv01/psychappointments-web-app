@@ -13,11 +13,13 @@ export default function Financials(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user == null) {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        gatherFinancialData()
-    }, [])
+    }, [user]);
+
+
 
     async function gatherFinancialData(){
         if(user == null){
