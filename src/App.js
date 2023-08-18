@@ -41,7 +41,8 @@ function App() {
                 <Route path="/profile/myappointments" element={null} />
                 <Route path="/profile/myclients" element={null} />
 
-                <Route path="/addappointment" element={<AddAppointment />} />
+                <Route path="/appointments/add" element={<AddAppointment />} />
+                <Route path="/appointments/edit" element={null} />
               </Routes>
             </Layout>
           </DateProvider>

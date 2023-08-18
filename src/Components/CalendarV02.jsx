@@ -62,11 +62,11 @@ Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
     getEndOfMonth
   } = useContext(DateContext); 
 
-  useEffect(() => {
-    console.log("start: " + startDate);
-    console.log("end: " + endDate);
-    console.log("view: " + view);
-  }, [startDate, endDate, view])
+  // useEffect(() => {
+  //   console.log("start: " + startDate);
+  //   console.log("end: " + endDate);
+  //   console.log("view: " + view);
+  // }, [startDate, endDate, view])
 
   function handleNavigate(event){
     if(view == "week"){
@@ -81,7 +81,7 @@ Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
   }
 
   function handleViewChange(event){
-    console.log(event);
+    //console.log(event);
     setView(event);
     if(event == "week"){
       let newStartDate = new Date(startDate);
