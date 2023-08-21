@@ -17,7 +17,7 @@ export default function AddAppointment(){
 
     useEffect(() => {
         if (user == null) {
-            navigate("/loginfirst");
+            //navigate("/loginfirst");
         }
     }, []);
 

@@ -13,7 +13,7 @@ export default function MainPage(){
     
     useEffect(() => {
         if (user == null) {
-            navigate("/loginfirst");
+            //navigate("/loginfirst");
         }
         if(location){
             let allEvents = [];
