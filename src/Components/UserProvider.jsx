@@ -10,14 +10,16 @@ const login = (userData) => {
     setUser(userData);
 };
 
-const logout = () => {
+const logout = async () => {
+    console.log("LOGOUT");
     //clear session storage!
-    sessionStorage.clear();
+    await sessionStorage.clear();
     setUser(null);
 };
 
 const retreiveUser = () => {
     if(user != null){
+        console.log("User found in context");
         return user;
     }
     //if page reloads and context user is empty
@@ -26,6 +28,7 @@ const retreiveUser = () => {
         const storedUser = JSON.parse(storedUserString);
         setUser(storedUser);
         console.log("User successfully retreived from sessionStorage");
+        return storedUser;
     } else {
         console.log("User could not be retreived from sessionStorage");
         return null;

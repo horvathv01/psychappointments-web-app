@@ -10,24 +10,27 @@ export default function MainPage(){
     const {startDate, setStartDate, endDate, setEndDate, view, setView} = useContext(DateContext); 
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
+            navigate("/loginfirst");
+        }
+    }, [user]);
     
     useEffect(() => {
-        if (user == null) {
-            //navigate("/loginfirst");
-        }
-        if(location){
             let allEvents = [];
             //fetch all events for current week for current user
             //send user data --> credentials? part of body? --> should be GET, thus credentials would be a good choice
             setEvents(allEvents);
-        }
-    }, []);
+    }, [events]);
     
 
     return(
         <div>
             <h1>Your Events</h1>
-            {user != null && user.type == "psychologist" ? <button onClick={() => navigate("/addappointment")}>Add Appointment</button> : null}
+            {user != null && (user.type == "psychologist" || user.type == "client") ? <button onClick={() => 
+                navigate("/appointments/add")}>Add Appointment</button> : null}
             <CalendarV02 />
         </div>
     );

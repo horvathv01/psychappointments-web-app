@@ -14,6 +14,45 @@ export default function LoginPage(){
 
     const navigate = useNavigate();
 
+    const handleLoginTest = ()  => {
+      const psych1 = {
+        name: "Psychologist1",
+        type: "psychologist",
+        id: 1
+      }
+
+      const client1 = {
+        name: "Client1",
+        type: "client",
+        id: 2,
+        email: "csirke@pulyka.ru",
+        phone: "+361/123-4567",
+        dateOfBirth: "1994-07-24",
+        address: {
+          country: "Hungary",
+          zip: "1196",
+          city: "Budapest",
+          street: "Petőfi utca",
+          rest: "134/b"
+      }
+      }
+
+      const manager1 = {
+        name: "Manager1",
+        type: "manager",
+        id: 3
+      }
+
+      const admin1 = {
+        name: "Admin1",
+        type: "admin",
+        id: 4
+      }
+
+      login(admin1);
+      navigate("/");
+    };
+
     const handleLogin = () => {
         const credentialsParsed = btoa(`${userName}:${password}`);
         //fetch data based on userName and password
@@ -76,7 +115,7 @@ export default function LoginPage(){
 
           <Row className="mb-3 justify-content-center">
             <Col xs={12} sm={12} className="text-center mb-3">
-              <Button variant="primary" onClick={handleLogin} className="m-2">
+              <Button variant="primary" onClick={handleLoginTest} className="m-2">
                 Login
               </Button>
               <Button variant="secondary" onClick={handleRegister}>
