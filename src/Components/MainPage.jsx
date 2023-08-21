@@ -23,7 +23,7 @@ export default function MainPage(){
             //fetch all events for current week for current user
             //send user data --> credentials? part of body? --> should be GET, thus credentials would be a good choice
             setEvents(allEvents);
-    }, [events]);
+    }, []);
     
 
     return(
