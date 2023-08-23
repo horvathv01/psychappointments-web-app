@@ -7,19 +7,20 @@ export default function StarterPage(){
     const {user, login, logout, retreiveUser} = useContext(UserContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        navigateToPage();
-    }, [])
 
-    function navigateToPage(){
-        if(retreiveUser() == null){
+    useEffect(() => {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
             console.log("navigated to: /login");
             navigate("/login");
+        } else if (retreivedUser.type == "admin"){
+            console.log("admin navigated to: /locations");
+            navigate("/locations");
         } else {
             console.log("navigated to: /calendar");
             navigate("/calendar");
         }
-    };
+    }, [user]);
 
     return;
 }
