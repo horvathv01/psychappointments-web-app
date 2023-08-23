@@ -12,6 +12,7 @@ import LoginFirst from './Components/LoginFirst';
 import Locations from './Components/Locations';
 import Layout from './Components/Layout';
 import Financials from './Components/Financials';
+import AdminPage from './Components/AdminPage';
 
 function App() {
 
@@ -31,11 +32,16 @@ function App() {
                 <Route path="/error" element={<Error />} />
 
                 <Route path="/calendar" element={<MainPage />} />
-
                 <Route path="/locations" element={<Locations />} />
-                <Route path="/financials" element={< Financials/>} />
-                <Route path="/admin" element={null} />
+                <Route path="/financials" element={<Financials/>} />
+
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/registration" element={null} />
+                <Route path="/admin/delete" element={null} />
+                
                 <Route path="/manager" element={null} />
+                <Route path="/manager/registration" element={null} />
+                <Route path="/manager/delete" element={null} />
 
                 <Route path="/profile" element={null} />
                 <Route path="/profile/myappointments" element={null} />

@@ -2,7 +2,6 @@ import CalendarV02 from "./CalendarV02";
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { DateContext } from "../DateContext";
-import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 
 export default function MainPage(){
@@ -15,6 +14,8 @@ export default function MainPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
+        } else if (retreivedUser.type == "admin"){
+            navigate("/locations");
         }
     }, [user]);
     
