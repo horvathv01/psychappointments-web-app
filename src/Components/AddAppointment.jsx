@@ -45,7 +45,7 @@ export default function AddAppointment(){
         //if session is scheduled for unfit time (collides with another one): respond with nope (hacker protection)
     }
 
-    function getLocations(){
+    function GetLocations(){
         let locations = [];
         if(user != null && (user.type == "psychologist" || user.type == "manager")){
         //only fetch associated locations
@@ -75,7 +75,7 @@ export default function AddAppointment(){
         setAllPsychologists(psychologists);
     }
 
-    function getAvailableTimeSlots(){
+    function GetAvailableTimeSlots(){
         if(psychologist == null){
             return (
                 <p>Choose psychologist first!</p>
@@ -98,7 +98,7 @@ export default function AddAppointment(){
         setSessionEnd(slot.end);
     }
 
-    function generatePsychologistDataField(){
+    function GeneratePsychologistDataField(){
         if(psychologist != null){
             return(
                 <p>{psychologist.name}</p>
@@ -128,7 +128,7 @@ export default function AddAppointment(){
         return address;
     }
 
-    function generateClientDataFields() {
+    function GenerateClientDataFields() {
         const clientFormFields = {
           name: { label: "name", type: "text", required: true },
           email: { label: "email", type: "text", required: true },
@@ -223,13 +223,13 @@ export default function AddAppointment(){
             <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
-                    {getLocations()}
+                    <GetLocations />
                     <p>Psychologist: </p>
-                    {generatePsychologistDataField()}
+                    <GeneratePsychologistDataField />
                     <p>Client: </p>
-                    {user && generateClientDataFields()}
+                    {user && <GenerateClientDataFields />}
                     <p>Select time slot for session: </p>
-                    {getAvailableTimeSlots()}
+                    <GetAvailableTimeSlots />
                     <p>Recurring session?</p>
                     <select onChange={(e) => handleFrequencyChange(e.target.value)} defaultValue="weekly">
                         <option value="weekly">Weekly</option>
