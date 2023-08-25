@@ -73,30 +73,33 @@ export function ProfileDetails({user}){
     </div>);
 }
 
-export function EditProfile({user, saveProfile, loggedIn}){
+export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newRegistration}){
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState(user.phone);
-    const [email, setEmail] = useState(user.email);
-    const [birthDate, setBirthDate] = useState(user.dateOfBirth);
+    const [phone, setPhone] = useState(!newRegistration ? user.phone : "");
+    const [email, setEmail] = useState(!newRegistration ? user.email : "");
+    const [birthDate, setBirthDate] = useState(!newRegistration ? user.dateOfBirth : "");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
-    const [country, setCountry] = useState(user.address.country);
-    const [zip, setZip] = useState(user.address.zip);
-    const [city, setCity] = useState(user.address.city);
-    const [street, setStreet] = useState(user.address.street);
-    const [addressRest, setAddressRest] = useState(user.address.rest);
+    const [country, setCountry] = useState(!newRegistration ? user.address.country : "");
+    const [zip, setZip] = useState(!newRegistration ? user.address.zip : "");
+    const [city, setCity] = useState(!newRegistration ? user.address.city : "");
+    const [street, setStreet] = useState(!newRegistration ? user.address.street : "");
+    const [addressRest, setAddressRest] = useState(!newRegistration ? user.address.rest : "");
 
-    const [registeredBy, setRegisteredBy] = useState(null);
-    const [userType, setUserType] = useState(user.type);
+    const [registeredBy, setRegisteredBy] = useState(registeredByUser);
+    const [userType, setUserType] = useState(!newRegistration ? user.type : "client");
 
-    
+
     useEffect(() => {
-    const userName = user.name.split(" ");
-    setFirstName(userName[0]);
-    userName.shift();
-    setLastName(userName.join());
+    if(!newRegistration){
+        const userName = user.name.split(" ");
+        setFirstName(userName[0]);
+        userName.shift();
+        setLastName(userName.join());
+    }
+    
     }, []);
 
     function validateUserInput(){
@@ -181,7 +184,7 @@ export function EditProfile({user, saveProfile, loggedIn}){
     }
 
 
-    return(user && 
+    return( 
     <div>
     {loggedIn && (loggedIn.type == "admin" || loggedIn.type == "manager") && <SelectUserType />}
     <div>

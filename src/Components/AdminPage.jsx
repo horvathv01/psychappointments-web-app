@@ -18,7 +18,7 @@ export default function AdminPage(){
     return(
         <div>
             <button onClick={() => navigate("/registration")}>Register User</button>
-            <button onClick={() => navigate("/admin/edituser")}>Edit User</button>
+            <button onClick={() => navigate("/edituser")}>Edit User</button>
             <button onClick={() => navigate("/manager")}>Manager Page</button>
         </div>
     )

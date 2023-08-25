@@ -17,7 +17,7 @@ export default function AdminEditUser(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "admin" && retreivedUser.type != "manager"){
             navigate("/unauthorized");
         }
         //fetch all users, then setAllUsers(result)

@@ -79,7 +79,7 @@ export default function LoginPage(){
       }
       }
 
-      login(admin1);
+      login(psych1);
       navigate("/");
     };
 
