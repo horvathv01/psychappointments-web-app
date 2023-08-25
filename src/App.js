@@ -20,6 +20,7 @@ import ProfilePage from './Components/ProfilePage';
 import AdminEditUser from './Components/AdminEditUser';
 import MyClientsPage from './Components/MyClientsPage';
 import Appointments from './Components/Appointments';
+import EditAppointment from './Components/EditAppointment';
 
 function App() {
 
@@ -53,7 +54,7 @@ function App() {
 
                 <Route path="/appointments" element={<Appointments />} />
                 <Route path="/appointments/add" element={<AddAppointment />} />
-                <Route path="/appointments/edit" element={null} />
+                <Route path="/appointments/edit" element={<EditAppointment />} />
 
                 <Route path="/rooms/add" element={null} />
                 <Route path="/rooms/edit" element={null} />

@@ -60,7 +60,7 @@ function AppointmentDetails({appointment}){
                 Price: {appointment.price}
                 Frequency: {appointment.frequency}
             </p>
-            <button onClick={() => navigate(`/appointments/edit`)}>Edit Appointment</button>        
+            <button onClick={() => navigate(`/appointments/edit?id=${appointment.id}`)}>Edit Appointment</button>        
         </div>
     )
 }
