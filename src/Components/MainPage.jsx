@@ -14,7 +14,7 @@ export default function MainPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type == "admin"){
+        } else if (retreivedUser.type == "admin" || retreivedUser.type == "manager"){
             navigate("/locations");
         }
     }, [user]);

@@ -44,7 +44,7 @@ export default function NavBar(){
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto">
                 {user == null ? <Nav.Link href="/login">Log In</Nav.Link> : null}
-                {user && user.type != "admin" && <Nav.Link href="/calendar">My Events</Nav.Link>}
+                {user && user.type != "admin" && user.type != "manager" && <Nav.Link href="/calendar">My Events</Nav.Link>}
                 {user && user.type != "client" && <Nav.Link href="/locations">Locations</Nav.Link>}
                 <Nav.Link href="/financials">Financials</Nav.Link>
                 {user && user.type === "admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
