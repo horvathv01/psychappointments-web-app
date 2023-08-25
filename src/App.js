@@ -17,6 +17,7 @@ import ManagerPage from './Components/ManagerPage';
 import Unauthorized from './Components/Unauthorized';
 import Registration from './Components/Registration';
 import ProfilePage from './Components/ProfilePage';
+import AdminEditUser from './Components/AdminEditUser';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/financials" element={<Financials/>} />
 
                 <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin/edituser" element={<AdminEditUser />} />
                 <Route path="/manager" element={<ManagerPage />} />
 
                 <Route path="/profile" element={<ProfilePage />} />

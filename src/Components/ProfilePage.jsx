@@ -37,31 +37,13 @@ export default function ProfilePage(){
         logout();
         navigate("/loginfirst");
     }
-    
-    function ProfileDetails(){
-    
-        return(<div>
-            {<div><p>Type: </p><p>{user.type}</p></div>}
-            {<div><p>ID: </p><p>{user.id}</p></div>}
-            {<div><p>Name: </p><p>{user.name}</p></div>}
-            {<div><p>Email: </p><p>{user.email}</p></div>}
-            {<div><p>Phone: </p><p>{user.phone}</p></div>}
-            {<div><p>Birth date: </p><p>{user.dateOfBirth}</p></div>}
-            <p>Address: </p>
-            {<div><p>Country: </p><p>{user.address.country}</p></div>}
-            {<div><p>ZIP or Postal Code: </p><p>{user.address.zip}</p></div>}
-            {<div><p>City: </p><p>{user.address.city}</p></div>}
-            {<div><p>Street: </p><p>{user.address.street}</p></div>}
-            {<div><p>Rest of Address: </p><p>{user.address.rest}</p></div>}
-        </div>);
-    }
 
     return(<div>
         <h1>Profile Page</h1>
         <p>Profile details</p>
 
-        {user && !edit && <ProfileDetails />}
-        {user && edit && <EditProfile user={user} saveProfile={saveProfile}/>}
+        {user && !edit && <ProfileDetails user={user}/>}
+        {user && edit && <EditProfile user={user} saveProfile={saveProfile} loggedIn={user}/>}
         <br/>
         {!edit && <button onClick={() => setEdit(!edit)}>Edit own profile</button>}
         {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
@@ -74,7 +56,24 @@ export default function ProfilePage(){
     </div>);
 };
 
-function EditProfile({user, saveProfile}){
+export function ProfileDetails({user}){
+    return(user && <div>
+        {<div><p>Type: </p><p>{user.type}</p></div>}
+        {<div><p>ID: </p><p>{user.id}</p></div>}
+        {<div><p>Name: </p><p>{user.name}</p></div>}
+        {<div><p>Email: </p><p>{user.email}</p></div>}
+        {<div><p>Phone: </p><p>{user.phone}</p></div>}
+        {<div><p>Birth date: </p><p>{user.dateOfBirth}</p></div>}
+        <p>Address: </p>
+        {<div><p>Country: </p><p>{user.address.country}</p></div>}
+        {<div><p>ZIP or Postal Code: </p><p>{user.address.zip}</p></div>}
+        {<div><p>City: </p><p>{user.address.city}</p></div>}
+        {<div><p>Street: </p><p>{user.address.street}</p></div>}
+        {<div><p>Rest of Address: </p><p>{user.address.rest}</p></div>}
+    </div>);
+}
+
+export function EditProfile({user, saveProfile, loggedIn}){
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState(user.phone);
@@ -175,16 +174,16 @@ function EditProfile({user, saveProfile}){
                 <option value="client">Client</option>
                 <option value="psychologist">Psychologist</option>
                 <option value="manager">Manager</option>
-                {user && user.type == "admin" && <option value="admin">Admin</option>}
+                {loggedIn && loggedIn.type == "admin" && <option value="admin">Admin</option>}
                 </select>
             </div>
         )
     }
 
 
-    return(
+    return(user && 
     <div>
-    {user && (user.type == "admin" || user.type == "manager") && <SelectUserType />}
+    {loggedIn && (loggedIn.type == "admin" || loggedIn.type == "manager") && <SelectUserType />}
     <div>
     <Form onSubmit={(e) => {
         e.preventDefault();
