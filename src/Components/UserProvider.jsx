@@ -35,8 +35,19 @@ const retreiveUser = () => {
     }
 };
 
+const updateUser = async (newUser) => {
+    if(!newUser){
+        console.log("User update not successful.")
+        return;
+    }
+
+    await sessionStorage.clear();
+    login(newUser);
+    console.log("User update successful.")
+};
+
 return (
-    <UserContext.Provider value={{user, login, logout, retreiveUser}}>
+    <UserContext.Provider value={{user, login, logout, retreiveUser, updateUser}}>
         {children}
     </UserContext.Provider>
 );

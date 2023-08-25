@@ -36,39 +36,17 @@ export default function Registration(){
         }
     }, [user]);
 
-    function validateUserName() {
-        function validate(input){
-        if(input == "" || input == undefined || input == null){
-          return false;
-        }
-          const alphabetAndNumbers = "aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz0123456789";
-          for(let i = 0; i < input.length; i++){
-            if(!alphabetAndNumbers.includes(input[i].toLowerCase())){
-              window.alert("Invalid username! A user name can only include letters and numbers (no space or special characters).");              
-              return false;
-            }
-          }
-          return true;
-        }
-          return (validate(firstName) && validate(lastName));
-        }
-
-    function validateBirthDate(){
-        if(birthDate == "" || birthDate == undefined || birthDate == null){
-            return false;
-          }
-        return true;
-    }
+    
 
 
     function validateUserInput(){
-        if(!validateUserName()){
+        if(!validateUserName(firstName, lastName)){
             window.alert("Username is required!");
             setFirstName("");
             setLastName("");
             return false;
         }
-        if(!validateBirthDate()){
+        if(!validateBirthDate(birthDate)){
             window.alert("Birth date cannot be empty!");
             setBirthDate("");
             return false;
@@ -104,7 +82,6 @@ export default function Registration(){
 
     function register(){
         if(!validateUserInput()){
-            console.log("szar")
             return;
         }
         const userName = firstName + " " + lastName;
@@ -392,3 +369,26 @@ export function validateAddress(country, zip, city, street, addressRest){
     return true;
 }
 
+export function validateUserName(firstName, lastName) {
+    function validate(input){
+    if(input == "" || input == undefined || input == null){
+      return false;
+    }
+      const alphabetAndNumbers = "aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz0123456789 ";
+      for(let i = 0; i < input.length; i++){
+        if(!alphabetAndNumbers.includes(input[i].toLowerCase())){
+          window.alert("Invalid username! A user name can only include letters and numbers (no space or special characters).");              
+          return false;
+        }
+      }
+      return true;
+    }
+      return (validate(firstName) && validate(lastName));
+    }
+
+export function validateBirthDate(birthDate){
+    if(birthDate == "" || birthDate == undefined || birthDate == null){
+        return false;
+      }
+    return true;
+}

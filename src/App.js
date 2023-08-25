@@ -16,6 +16,7 @@ import AdminPage from './Components/AdminPage';
 import ManagerPage from './Components/ManagerPage';
 import Unauthorized from './Components/Unauthorized';
 import Registration from './Components/Registration';
+import ProfilePage from './Components/ProfilePage';
 
 function App() {
 
@@ -32,7 +33,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/loginfirst" element={<LoginFirst />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/deleteuser" element={<p>Delete user</p>} />
+                <Route path="/editusers" element={<p>Edit users</p>} />
                 <Route path="/error" element={<Error />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -43,8 +44,7 @@ function App() {
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/manager" element={<ManagerPage />} />
 
-                <Route path="/profile" element={null} />
-                <Route path="/profile/myappointments" element={null} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/myclients" element={null} />
 
                 <Route path="/appointments/add" element={<AddAppointment />} />

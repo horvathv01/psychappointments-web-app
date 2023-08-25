@@ -18,7 +18,17 @@ export default function LoginPage(){
       const psych1 = {
         name: "Psychologist1",
         type: "psychologist",
-        id: 1
+        id: 1,
+        email: "csirke@pulyka.ru",
+        phone: "+361/123-4567",
+        dateOfBirth: "1994-07-24",
+        address: {
+          country: "Hungary",
+          zip: "1196",
+          city: "Budapest",
+          street: "Petőfi utca",
+          rest: "134/b"
+      }
       }
 
       const client1 = {
@@ -40,16 +50,36 @@ export default function LoginPage(){
       const manager1 = {
         name: "Manager1",
         type: "manager",
-        id: 3
+        id: 3,
+        email: "csirke@pulyka.ru",
+        phone: "+361/123-4567",
+        dateOfBirth: "1994-07-24",
+        address: {
+          country: "Hungary",
+          zip: "1196",
+          city: "Budapest",
+          street: "Petőfi utca",
+          rest: "134/b"
+      }
       }
 
       const admin1 = {
         name: "Admin1",
         type: "admin",
-        id: 4
+        id: 4,
+        email: "csirke@pulyka.ru",
+        phone: "+361/123-4567",
+        dateOfBirth: "1994-07-24",
+        address: {
+          country: "Hungary",
+          zip: "1196",
+          city: "Budapest",
+          street: "Petőfi utca",
+          rest: "134/b"
+      }
       }
 
-      login(admin1);
+      login(psych1);
       navigate("/");
     };
 
