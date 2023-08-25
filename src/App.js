@@ -15,6 +15,7 @@ import Financials from './Components/Financials';
 import AdminPage from './Components/AdminPage';
 import ManagerPage from './Components/ManagerPage';
 import Unauthorized from './Components/Unauthorized';
+import Registration from './Components/Registration';
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
                 <Route path="/" element={<StarterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/loginfirst" element={<LoginFirst />} />
-                <Route path="/registration" element={<p>registration page</p>} />
+                <Route path="/registration" element={<Registration />} />
                 <Route path="/deleteuser" element={<p>Delete user</p>} />
                 <Route path="/error" element={<Error />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
