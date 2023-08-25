@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 
-export default function AdminPage(){
+export default function ManagerPage(){
     const {user, retreiveUser} = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -10,7 +10,7 @@ export default function AdminPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "manager" && retreivedUser.type != "admin"){
             navigate("/unauthorized");
         }
     }, [user]);
@@ -18,8 +18,11 @@ export default function AdminPage(){
     return(
         <div>
             <button onClick={() => navigate("/registration")}>Register User</button>
-            <button onClick={() => navigate("/deleteuser")}>Delete User</button>
-            <button onClick={() => navigate("/manager")}>Manager Page</button>
+            <button onClick={() => navigate("/appointments/add")}>Add Appointment</button>
+            <button onClick={() => navigate("/appointments/edit")}>Edit Appointments</button>
+            <button onClick={() => navigate("/rooms/add")}>Add New Room</button>
+            <button onClick={() => navigate("/rooms/edit")}>Edit Rooms</button>
+            <button onClick={() => navigate("/rooms/delete")}>Delete Room</button>
         </div>
     )
 }

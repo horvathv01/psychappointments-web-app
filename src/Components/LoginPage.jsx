@@ -49,7 +49,7 @@ export default function LoginPage(){
         id: 4
       }
 
-      login(admin1);
+      login(manager1);
       navigate("/");
     };
 

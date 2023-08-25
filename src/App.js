@@ -13,6 +13,8 @@ import Locations from './Components/Locations';
 import Layout from './Components/Layout';
 import Financials from './Components/Financials';
 import AdminPage from './Components/AdminPage';
+import ManagerPage from './Components/ManagerPage';
+import Unauthorized from './Components/Unauthorized';
 
 function App() {
 
@@ -29,19 +31,16 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/loginfirst" element={<LoginFirst />} />
                 <Route path="/registration" element={<p>registration page</p>} />
+                <Route path="/deleteuser" element={<p>Delete user</p>} />
                 <Route path="/error" element={<Error />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
 
                 <Route path="/calendar" element={<MainPage />} />
                 <Route path="/locations" element={<Locations />} />
                 <Route path="/financials" element={<Financials/>} />
 
                 <Route path="/admin" element={<AdminPage />} />
-                <Route path="/admin/registration" element={null} />
-                <Route path="/admin/delete" element={null} />
-                
-                <Route path="/manager" element={null} />
-                <Route path="/manager/registration" element={null} />
-                <Route path="/manager/delete" element={null} />
+                <Route path="/manager" element={<ManagerPage />} />
 
                 <Route path="/profile" element={null} />
                 <Route path="/profile/myappointments" element={null} />
@@ -49,6 +48,10 @@ function App() {
 
                 <Route path="/appointments/add" element={<AddAppointment />} />
                 <Route path="/appointments/edit" element={null} />
+
+                <Route path="/rooms/add" element={null} />
+                <Route path="/rooms/edit" element={null} />
+                <Route path="/rooms/delete" element={null} />
               </Routes>
             </Layout>
           </DateProvider>
