@@ -49,6 +49,8 @@ export default function ProfilePage(){
         {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
         {edit && <button onClick={() => deleteProfile()}>Delete Profile</button>}
         <br/>
+        {user && user.type != "client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
+        {user && user.type != "client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
         <button onClick={() => navigate("/appointments/add")}>Add Appointments</button>
         <button onClick={() => navigate("/appointments/edit")}>My Appointments</button>
         <button onClick={() => navigate("/profile/myclients")}>My Clients</button>
