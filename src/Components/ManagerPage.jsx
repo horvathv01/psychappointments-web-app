@@ -18,6 +18,9 @@ export default function ManagerPage(){
     return(
         <div>
             <button onClick={() => navigate("/registration")}>Register User</button>
+            <button onClick={() => navigate("/edituser")}>Edit User</button>
+            <button onClick={() => navigate("/slots/add")}>Add Slots</button>
+            <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>
             <button onClick={() => navigate("/appointments/add")}>Add Appointment</button>
             <button onClick={() => navigate("/appointments/edit")}>Edit Appointments</button>
             <button onClick={() => navigate("/rooms/add")}>Add New Room</button>

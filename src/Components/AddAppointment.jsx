@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
-import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 
 export default function AddAppointment(){
@@ -8,11 +7,11 @@ export default function AddAppointment(){
     const [client, setClient] = useState(null); //--> registered client for appointment
     const [psychologist, setPsychologist] = useState(null); //--> registered psych. for appointment
     const [location, setLocation] = useState(null); //--> registered location for appointment
+    const [date, setDate] = useState(null); //--> regsitered date for appointment
     const [sessionStart, setSessionStart] = useState(null); //--> registered session start for appointment
     const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end for appointment
     const [description, setDescription] = useState(""); //--> registered session description for appointment
     const [frequency, setFrequency] = useState("weekly"); //--> registered frequency for appointment
-    const [allPsychologists, setAllPsychologists] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,22 +19,19 @@ export default function AddAppointment(){
         if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        if(retreivedUser.type == "psychologist"){
-            setPsychologist(retreivedUser);
-        } else if (retreivedUser.type == "client"){
+        if (retreivedUser.type == "client"){
             setClient(retreivedUser);
         }
-
     }, [user, client]);
 
 
     function handleSubmit(){
-        //validate data --> same as registration validator?
+        //validate data --> same as registration validator!
         //what to include? 
         //psychologist.id + psychologist.name? --> to track changes of id in future
         //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
         //location id (+ location name?)
-        //session start, session end
+        //session start, session end (date from date state)
         //frequency of session
         //session description
         //time of appointment addition + data of person who added it
@@ -45,24 +41,7 @@ export default function AddAppointment(){
         //if session is scheduled for unfit time (collides with another one): respond with nope (hacker protection)
     }
 
-    function GetLocations(){
-        let locations = [];
-        if(user != null && (user.type == "psychologist" || user.type == "manager")){
-        //only fetch associated locations
-        //setAllPsychologists(fetchedData)
-        }
-        //fetch all locations
-        //setAllPsychologists(fetchedData)
-
-        return(
-            <div>
-                <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
-                    <option value="" disabled>Choose Location</option>
-                    {locations.map(l => <option value={l}>{l.name}</option>)}
-                </select>
-            </div>
-        )
-    }
+    
 
     function handleFrequencyChange(freq){
         setFrequency(freq);
@@ -70,48 +49,14 @@ export default function AddAppointment(){
 
     function handleLocationChange(location){
         setLocation(location);
-        let psychologists = [];
-        //fetch psychologists available at location
-        setAllPsychologists(psychologists);
     }
 
-    function GetAvailableTimeSlots(){
-        if(psychologist == null){
-            return (
-                <p>Choose psychologist first!</p>
-            );
-        } else {
-            let slots = [];
-            //fetch available time slots of chosen psychologist
-            return(<div>
-                <select onChange={(e) => setSlot(e.target.value)} defaultValue="">
-                    <option value="" disabled>Choose Slot</option>
-                    {slots.map(s => <option value={s}>{s.name}</option>)}
-                </select>
-            </div>
-        );
-        }
-    }
+    
 
     function setSlot(slot){
         setSessionStart(slot.start);
         setSessionEnd(slot.end);
     }
-
-    function GeneratePsychologistDataField(){
-        if(psychologist != null){
-            return(
-                <p>{psychologist.name}</p>
-            );
-        } else {
-            return(
-                <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
-                    <option value="" disabled>Choose Psychologist</option>
-                    {allPsychologists.map(p => <option value={p}>{p.name}</option>)}
-                </select>
-            );
-        };
-    };
 
     function parseAddress(input){
         let address = {
@@ -223,13 +168,15 @@ export default function AddAppointment(){
             <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
-                    <GetLocations />
+                    <GetLocations handleLocationChange={handleLocationChange} />
                     <p>Psychologist: </p>
-                    <GeneratePsychologistDataField />
+                    <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
                     <p>Client: </p>
-                    {user && <GenerateClientDataFields />}
+                    {user && <GenerateClientDataFields psychologist={psychologist}/>}
+                    <p>Select date:</p>
+                    <ChooseDate setDate={setDate}/>
                     <p>Select time slot for session: </p>
-                    <GetAvailableTimeSlots />
+                    <GetTimeSlots psychologist={psychologist} empty={true} />
                     <p>Recurring session?</p>
                     <select onChange={(e) => handleFrequencyChange(e.target.value)} defaultValue="weekly">
                         <option value="weekly">Weekly</option>
@@ -244,5 +191,98 @@ export default function AddAppointment(){
             </div>
         </div>
     )
+
+}
+
+export function GetLocations({handleLocationChange}){
+    const {user, retreiveUser} = useContext(UserContext);
+    let locations = [];
+    if(user != null && (user.type == "psychologist" || user.type == "manager")){
+    //only fetch associated locations
+    //setAllPsychologists(fetchedData)
+    }
+    //fetch all locations
+    //setAllPsychologists(fetchedData)
+
+    return(
+        <div>
+            <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
+                <option value="" disabled>Choose Location</option>
+                {locations.map(l => <option value={l}>{l.name}</option>)}
+            </select>
+        </div>
+    )
+}
+
+export function GeneratePsychologistDataField({psychologist, setPsychologist, location}){
+    const {user, retreiveUser} = useContext(UserContext);
+    const [allPsychologists, setAllPsychologists] = useState([]);
+
+    useEffect(() => {
+        const retreivedUser = retreiveUser();
+        if(retreivedUser == null){
+            navigate("/loginfirst");
+        }
+        if(retreivedUser.type != "psychologist"){
+            //fetch all psychologists with associated location
+            //setAllPsychologists(result)
+        } else {
+            setPsychologist(retreivedUser);
+        }
+    }, [user, location]);
+
+
+    if(psychologist != null){
+        return(
+            <p>{psychologist.name}</p>
+        );
+    } else {
+        return(
+            <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
+                <option value="" disabled>Choose Psychologist</option>
+                {allPsychologists.map(p => <option value={p}>{p.name}</option>)}
+            </select>
+        );
+    };
+};
+
+export function GetTimeSlots({psychologist, empty}){
+    const [allSlots, setAllSlots] = useState([]);
+
+    useEffect(() => {
+        if(psychologist != null){
+            if(empty){ //empty is a boolean
+                //fetch empty time slots only
+                //setAllSlots(result)
+            } else {
+                //fetch all time slots of psychologist
+                //setAllSlots(result)
+            }
+        }
+        
+    }, [psychologist]);
+
+
+    if(psychologist == null){
+        return (
+            <p>Choose psychologist first!</p>
+        );
+    } else {
+        let slots = [];
+        //fetch available time slots of chosen psychologist
+        return(<div>
+            <select onChange={(e) => setSlot(e.target.value)} defaultValue="">
+                <option value="" disabled>Choose Slot</option>
+                {allSlots.map(s => <option value={s}>{s.name}</option>)}
+            </select>
+        </div>
+    );
+    }
+}
+
+export function ChooseDate({setDate}){
+    return(<div>
+        <input type="date" onChange={(e) => setDate(e.target.value)}></input>
+    </div>);
 
 }

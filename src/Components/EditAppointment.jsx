@@ -22,12 +22,13 @@ export default function EditAppointment(){
         //is it null/undefined? --> navigate("/appointments")
         //fetch appointment information
         //is user not associated with appointment && type != "admin"? --> navigate("/appointments")
+        //setAppointment(result)
         
     }, [user]);
 
     return(
         <div>
-
+            
         </div>
     )
 }
