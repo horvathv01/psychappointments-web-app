@@ -105,17 +105,17 @@ export default function MyClientsPage(){
     
     return(<div>    
         <h1>My Clients</h1>
-        {allClients && allClients.map(client => <ClientDetails client={client}/>)}
+        {allClients && allClients.map(client => <ClientDetails key={"client" + client.id} client={client}/>)}
     </div>);
 
 }
 
 function ClientDetails({client}){
     const [details, setDetails] = useState(false);
-    console.log(client);
+    //console.log(client);
 
     return(
-<div key={"client" + client.id}>
+<div>
                 <p>Name: {client.name}, Phone: {client.phone}, Email: {client.email}</p>
                 <button onClick={() => setDetails(!details)}>Details</button>
                 {details && <div>

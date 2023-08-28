@@ -61,8 +61,9 @@ export default function NavBar(){
                   } value="">
                   <option disabled value="">Profile Menu</option>
                   <option value="/profile">My Profile</option>
+                  {user && user.type != "client" && <option value="/slots/edit">Slots</option>}
                   <option value="/appointments">Appointments</option>
-                  {user && user.type == "psychologist" && <option value="/profile/myclients">My Clients</option>}
+                  {user && user.type == "psychologist" && <option value="/profile/myclients">Clients</option>}
                   {user != null && <option value="logout">Log out</option>}
                 </select>
               </Nav>

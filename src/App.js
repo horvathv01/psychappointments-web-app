@@ -22,6 +22,7 @@ import MyClientsPage from './Components/MyClientsPage';
 import Appointments from './Components/Appointments';
 import EditAppointment from './Components/EditAppointment';
 import AddSlot from './Components/AddSlot';
+import EditSlot from './Components/EditSlot';
 
 function App() {
 
@@ -54,7 +55,7 @@ function App() {
                 <Route path="/profile/myclients" element={<MyClientsPage />} />
 
                 <Route path="/slots/add" element={<AddSlot />} />
-                <Route path="/slots/edit" element={null} />
+                <Route path="/slots/edit" element={<EditSlot />} />
 
                 <Route path="/appointments" element={<Appointments />} />
                 <Route path="/appointments/add" element={<AddAppointment />} />

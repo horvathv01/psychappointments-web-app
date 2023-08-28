@@ -40,21 +40,19 @@ export default function ProfilePage(){
 
     return(<div>
         <h1>Profile Page</h1>
-        <p>Profile details</p>
-
-        {user && !edit && <ProfileDetails user={user}/>}
-        {user && edit && <EditProfile user={user} saveProfile={saveProfile} loggedIn={user}/>}
-        <br/>
         {!edit && <button onClick={() => setEdit(!edit)}>Edit own profile</button>}
-        {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
-        {edit && <button onClick={() => deleteProfile()}>Delete Profile</button>}
-        <br/>
         {user && user.type != "client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
         {user && user.type != "client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
         <button onClick={() => navigate("/appointments/add")}>Add Appointments</button>
-        <button onClick={() => navigate("/appointments/edit")}>My Appointments</button>
+        <button onClick={() => navigate("/appointments")}>My Appointments</button>
         <button onClick={() => navigate("/profile/myclients")}>My Clients</button>
         <button onClick={() => navigate("/registration")}>Register User</button>
+        <p>Profile details</p>
+        {user && !edit && <ProfileDetails user={user}/>}
+        {user && edit && <EditProfile user={user} saveProfile={saveProfile} loggedIn={user}/>}
+        <br/>
+        {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
+        {edit && <button onClick={() => deleteProfile()}>Delete Profile</button>}
     </div>);
 };
 
