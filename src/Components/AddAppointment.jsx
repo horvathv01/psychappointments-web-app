@@ -11,7 +11,7 @@ export default function AddAppointment(){
     const [sessionStart, setSessionStart] = useState(null); //--> registered session start for appointment
     const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end for appointment
     const [description, setDescription] = useState(""); //--> registered session description for appointment
-    const [frequency, setFrequency] = useState("weekly"); //--> registered frequency for appointment
+    const [frequency, setFrequency] = useState("Weekly"); //--> registered frequency for appointment
     const [slot, setSlot] = useState(null);
     const navigate = useNavigate();
 
@@ -67,11 +67,11 @@ export default function AddAppointment(){
                     <p>Select time slot for session: </p>
                     <GetTimeSlots psychologist={psychologist} empty={true} setSlot={setSlot}/>
                     <p>Recurring session?</p>
-                    <select onChange={(e) => setFrequency(e.target.value)} defaultValue="weekly">
-                        <option value="weekly">Weekly</option>
-                        <option value="2week">Bi-weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="none">None (only one session)</option>
+                    <select onChange={(e) => setFrequency(e.target.value)} defaultValue="Weekly">
+                        <option value="Weekly">Weekly</option>
+                        <option value="Biweekly">Bi-weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="None">None (only one session)</option>
                     </select>
                     <p>Please describe the problem briefly!</p>
                     <input type="textarea" onChange={(e) => setDescription(e.target.value)} required></input>
