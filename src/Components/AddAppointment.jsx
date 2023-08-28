@@ -12,6 +12,7 @@ export default function AddAppointment(){
     const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end for appointment
     const [description, setDescription] = useState(""); //--> registered session description for appointment
     const [frequency, setFrequency] = useState("weekly"); //--> registered frequency for appointment
+    const [slot, setSlot] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function AddAppointment(){
         //psychologist.id + psychologist.name? --> to track changes of id in future
         //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
         //location id (+ location name?)
+        //slot
         //session start, session end (date from date state)
         //frequency of session
         //session description
@@ -42,119 +44,6 @@ export default function AddAppointment(){
     }
 
     
-
-    function handleFrequencyChange(freq){
-        setFrequency(freq);
-    }
-
-    function handleLocationChange(location){
-        setLocation(location);
-    }
-
-    
-
-    function setSlot(slot){
-        setSessionStart(slot.start);
-        setSessionEnd(slot.end);
-    }
-
-    function parseAddress(input){
-        let address = {
-            country: "",
-            zip: "",
-            city: "",
-            street: "",
-            rest: ""
-        }
-        if(input != undefined){
-            return input;
-        }
-            //empty address can still be returned so that object structure can still be used
-        return address;
-    }
-
-    function GenerateClientDataFields() {
-        const clientFormFields = {
-          name: { label: "name", type: "text", required: true },
-          email: { label: "email", type: "text", required: true },
-          phone: { label: "phone", type: "phone", required: true },
-          dateOfBirth: { label: "dateofbirth", type: "date", required: true }
-        };
-      
-        const address = client != null ? parseAddress(client.address) : parseAddress();
-      
-        const defaultValues = Object.fromEntries(
-          Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
-            return [
-              fieldName,
-              user && user.type === "client" && client ? client[fieldProps.label] : ""
-            ];
-          })
-        );
-      
-        return (
-          <div>
-            {Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
-              return (
-                <div key={fieldName}>
-                  <label htmlFor={fieldName}>{fieldProps.label}:</label>
-                  <input
-                    required={fieldProps.required}
-                    className="input-field"
-                    id={fieldName}
-                    type={fieldProps.type}
-                    name={fieldName}
-                    defaultValue={defaultValues[fieldName]}
-                  />
-                </div>
-              );
-            })}
-                <div>
-                    <p>Address:</p>
-                    <label htmlFor="city">Country</label>
-                    <input 
-                    required 
-                    className="input-field" 
-                    type="text" 
-                    id="country" 
-                    name="country" 
-                    autoComplete="country" 
-                    enterKeyHint="next" 
-                    defaultValue={address.country}></input>
-                    <label htmlFor="postal-code">ZIP or postal code</label>
-                    <input
-                    required
-                    className="input-field" 
-                    id="postal-code" 
-                    type="text"
-                    name="postal-code" 
-                    autoComplete="postal-code" 
-                    enterKeyHint="next" 
-                    defaultValue={address.zip}></input>
-                    <label htmlFor="city">City</label>
-                    <input 
-                    required
-                    className="input-field" 
-                    id="city" 
-                    type="text" 
-                    name="city" 
-                    autoComplete="address-level2" 
-                    enterKeyHint="next" 
-                    defaultValue={address.city}></input>
-                    <label htmlFor="street-address">Street address</label>
-                    <input 
-                    required 
-                    className="input-field" 
-                    id="street-address" 
-                    type="text" 
-                    name="street-address" 
-                    autoComplete="street-address" 
-                    enterKeyHint="next" 
-                    defaultValue={address.street + " " + address.rest}></input>
-                </div>
-            </div>
-        )
-    };
 
     //choose location first --> fetch psychologists available at location
     //see user: if user is psychologist --> psychologist field should be filled with own data
@@ -168,17 +57,17 @@ export default function AddAppointment(){
             <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
-                    <GetLocations handleLocationChange={handleLocationChange} />
+                    <GetLocations handleLocationChange={setLocation} />
                     <p>Psychologist: </p>
                     <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
                     <p>Client: </p>
-                    {user && <GenerateClientDataFields psychologist={psychologist}/>}
+                    {user && <GenerateClientDataFields user={user} client={client}/>}
                     <p>Select date:</p>
                     <ChooseDate setDate={setDate}/>
                     <p>Select time slot for session: </p>
-                    <GetTimeSlots psychologist={psychologist} empty={true} />
+                    <GetTimeSlots psychologist={psychologist} empty={true} setSlot={setSlot}/>
                     <p>Recurring session?</p>
-                    <select onChange={(e) => handleFrequencyChange(e.target.value)} defaultValue="weekly">
+                    <select onChange={(e) => setFrequency(e.target.value)} defaultValue="weekly">
                         <option value="weekly">Weekly</option>
                         <option value="2week">Bi-weekly</option>
                         <option value="monthly">Monthly</option>
@@ -246,7 +135,7 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
     };
 };
 
-export function GetTimeSlots({psychologist, empty}){
+export function GetTimeSlots({psychologist, empty, setSlot}){
     const [allSlots, setAllSlots] = useState([]);
 
     useEffect(() => {
@@ -280,9 +169,107 @@ export function GetTimeSlots({psychologist, empty}){
     }
 }
 
-export function ChooseDate({setDate}){
+export function ChooseDate({setDate, date}){
     return(<div>
-        <input type="date" onChange={(e) => setDate(e.target.value)}></input>
+        <input type="date" onChange={(e) => setDate(e.target.value)}>{date && date}</input>
     </div>);
 
 }
+
+export function GenerateClientDataFields({user, client}) {
+    function parseAddress(input){
+        let address = {
+            country: "",
+            zip: "",
+            city: "",
+            street: "",
+            rest: ""
+        }
+        if(input != undefined){
+            return input;
+        }
+            //empty address can still be returned so that object structure can still be used
+        return address;
+    }
+
+    const clientFormFields = {
+      name: { label: "name", type: "text", required: true },
+      email: { label: "email", type: "text", required: true },
+      phone: { label: "phone", type: "phone", required: true },
+      dateOfBirth: { label: "dateofbirth", type: "date", required: true }
+    };
+  
+    const address = client != null ? parseAddress(client.address) : parseAddress();
+  
+    const defaultValues = Object.fromEntries(
+      Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
+        return [
+          fieldName,
+          user && user.type === "client" && client ? client[fieldProps.label] : ""
+        ];
+      })
+    );
+  
+    return (
+      <div>
+        {Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
+          return (
+            <div key={fieldName}>
+              <label htmlFor={fieldName}>{fieldProps.label}:</label>
+              <input
+                required={fieldProps.required}
+                className="input-field"
+                id={fieldName}
+                type={fieldProps.type}
+                name={fieldName}
+                defaultValue={defaultValues[fieldName]}
+              />
+            </div>
+          );
+        })}
+            <div>
+                <p>Address:</p>
+                <label htmlFor="city">Country</label>
+                <input 
+                required 
+                className="input-field" 
+                type="text" 
+                id="country" 
+                name="country" 
+                autoComplete="country" 
+                enterKeyHint="next" 
+                defaultValue={address.country}></input>
+                <label htmlFor="postal-code">ZIP or postal code</label>
+                <input
+                required
+                className="input-field" 
+                id="postal-code" 
+                type="text"
+                name="postal-code" 
+                autoComplete="postal-code" 
+                enterKeyHint="next" 
+                defaultValue={address.zip}></input>
+                <label htmlFor="city">City</label>
+                <input 
+                required
+                className="input-field" 
+                id="city" 
+                type="text" 
+                name="city" 
+                autoComplete="address-level2" 
+                enterKeyHint="next" 
+                defaultValue={address.city}></input>
+                <label htmlFor="street-address">Street address</label>
+                <input 
+                required 
+                className="input-field" 
+                id="street-address" 
+                type="text" 
+                name="street-address" 
+                autoComplete="street-address" 
+                enterKeyHint="next" 
+                defaultValue={address.street + " " + address.rest}></input>
+            </div>
+        </div>
+    )
+};

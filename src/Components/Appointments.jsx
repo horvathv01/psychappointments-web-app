@@ -40,7 +40,8 @@ export default function Appointments(){
     
     return(<div>    
         <h1>Appointments</h1>
-        {allAppointments && allAppointments.map(appointment => <AppointmentDetails appointment={appointment}/>)}
+        <button onClick={() => navigate("/appointments/add")}>Add New Appointment</button>
+        {allAppointments && allAppointments.map(appointment => <AppointmentDetails key={"appointment" + appointment.id} appointment={appointment}/>)}
     </div>);
 
 }
@@ -49,7 +50,7 @@ function AppointmentDetails({appointment}){
     const navigate = useNavigate();
 
     return(
-        <div key={"appointment" + appointment.id}>
+        <div>
             <p>
                 ID: {appointment.id}, 
                 Psychologist: {appointment.psychologist.name}, 
