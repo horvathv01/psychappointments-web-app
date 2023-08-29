@@ -23,6 +23,7 @@ import Appointments from './Components/Appointments';
 import EditAppointment from './Components/EditAppointment';
 import AddSlot from './Components/AddSlot';
 import EditSlot from './Components/EditSlot';
+import AddLocations from './Components/AddLocations';
 
 function App() {
 
@@ -61,8 +62,8 @@ function App() {
                 <Route path="/appointments/add" element={<AddAppointment />} />
                 <Route path="/appointments/edit" element={<EditAppointment />} />
 
-                <Route path="/rooms/add" element={null} />
-                <Route path="/rooms/edit" element={null} />
+                <Route path="/locations/add" element={<AddLocations />} />
+                <Route path="/locations/edit" element={null} />
               </Routes>
             </Layout>
           </DateProvider>

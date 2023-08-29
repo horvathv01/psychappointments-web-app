@@ -23,9 +23,8 @@ export default function ManagerPage(){
             <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>
             <button onClick={() => navigate("/appointments/add")}>Add Appointment</button>
             <button onClick={() => navigate("/appointments/edit")}>Edit Appointments</button>
-            <button onClick={() => navigate("/rooms/add")}>Add New Room</button>
-            <button onClick={() => navigate("/rooms/edit")}>Edit Rooms</button>
-            <button onClick={() => navigate("/rooms/delete")}>Delete Room</button>
+            <button onClick={() => navigate("/locations/add")}>Add New Location</button>
+            <button onClick={() => navigate("/locations/edit")}>Edit Locations</button>
         </div>
     )
 }
