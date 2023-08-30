@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
-import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import CalendarV02 from "./CalendarV02";
 import { DateContext } from "../DateContext";
