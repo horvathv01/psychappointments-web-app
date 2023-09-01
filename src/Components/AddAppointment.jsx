@@ -127,12 +127,19 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
         );
     } else {
         return(
-            <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
-                <option value="" disabled>Choose Psychologist</option>
-                {allPsychologists.map(p => <option value={p}>{p.name}</option>)}
-            </select>
+            <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} />
         );
     };
+};
+
+export function GenerateListOfPsychologists(allPsychologists, setPsychologist){
+
+    return(
+        <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
+                <option value="" disabled>Choose Psychologist</option>
+                {allPsychologists.length > 0 && allPsychologists.map(p => <option value={p}>{p.name}</option>)}
+        </select>
+    );
 };
 
 export function GetTimeSlots({psychologist, empty, setSlot}){
