@@ -24,6 +24,7 @@ import EditAppointment from './Components/EditAppointment';
 import AddSlot from './Components/AddSlot';
 import EditSlot from './Components/EditSlot';
 import AddLocations from './Components/AddLocations';
+import EditLocations from './Components/EditLocations';
 
 function App() {
 
@@ -40,7 +41,6 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/loginfirst" element={<LoginFirst />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/editusers" element={<p>Edit users</p>} />
                 <Route path="/error" element={<Error />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -63,7 +63,7 @@ function App() {
                 <Route path="/appointments/edit" element={<EditAppointment />} />
 
                 <Route path="/locations/add" element={<AddLocations />} />
-                <Route path="/locations/edit" element={null} />
+                <Route path="/locations/edit" element={<EditLocations />} />
               </Routes>
             </Layout>
           </DateProvider>

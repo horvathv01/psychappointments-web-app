@@ -1,10 +1,13 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import { GenerateListOfPsychologists } from "./AddAppointment";
 
 export default function MyClientsPage(){    
     const {user, retreiveUser} = useContext(UserContext);
     const [allClients, setAllClients] = useState(null);
+    const [psychologist, setPsychologist] = useState(null);
+    const [allPsychologists, setAllPsychologists] = useState([]);
 
     const navigate = useNavigate();
 
@@ -12,10 +15,26 @@ export default function MyClientsPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "psychologist"){
+        } else if (retreivedUser.type != "psychologist" && retreivedUser.type != "admin"){
             navigate("/unauthorized");
         }
-        //fetch all clients, sessions included
+
+        if(retreivedUser.type == "psychologist"){
+            setPsychologist(retreivedUser);    
+        }
+
+        if(retreivedUser.type == "admin"){
+            //fetch all psychologists
+            //setAllPsychologists(result)
+        }
+        
+
+    }, [user]);
+
+    useEffect(() => {
+        if(psychologist != null){
+        //fetch all clients of psychologist, sessions included
+        
         let sessions = [];
         for(let i = 0; i < 7; i++){
             const start = new Date();
@@ -100,11 +119,12 @@ export default function MyClientsPage(){
 
           const trialUsers = [client0, client1, client2, client3];
           setAllClients(trialUsers);
-
-    }, [user]);
+        }
+    }, [psychologist]);
     
     return(<div>    
         <h1>My Clients</h1>
+        {user && user.type == "admin" && <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} />}
         {allClients && allClients.map(client => <ClientDetails key={"client" + client.id} client={client}/>)}
     </div>);
 
