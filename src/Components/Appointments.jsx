@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { GenerateListOfPsychologists } from "./AddAppointment";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function Appointments(){    
     const {user, retreiveUser} = useContext(UserContext);
@@ -24,6 +25,18 @@ export default function Appointments(){
         } else if (retreivedUser.type == "Admin"){
         //fetch all psychologists, choose the one you want to see from list
         //setAllPsychologists(result)
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(data => data.json())
+        .then(info => {
+            setAllPsychologists(info)
+        })
+        .catch(error => console.log(error));
         }
         
         let sessions = [];
