@@ -15,15 +15,15 @@ export default function MyClientsPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "psychologist" && retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "Psychologist" && retreivedUser.type != "Admin"){
             navigate("/unauthorized");
         }
 
-        if(retreivedUser.type == "psychologist"){
+        if(retreivedUser.type == "Psychologist"){
             setPsychologist(retreivedUser);    
         }
 
-        if(retreivedUser.type == "admin"){
+        if(retreivedUser.type == "Admin"){
             //fetch all psychologists
             //setAllPsychologists(result)
         }
@@ -124,7 +124,7 @@ export default function MyClientsPage(){
     
     return(<div>    
         <h1>My Clients</h1>
-        {user && user.type == "admin" && <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} />}
+        {user && user.type == "Admin" && <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} />}
         {allClients && allClients.map(client => <ClientDetails key={"client" + client.id} client={client}/>)}
     </div>);
 

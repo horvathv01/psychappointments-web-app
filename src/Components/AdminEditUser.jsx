@@ -17,13 +17,13 @@ export default function AdminEditUser(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "admin" && retreivedUser.type != "manager"){
+        } else if (retreivedUser.type != "Admin" && retreivedUser.type != "Manager"){
             navigate("/unauthorized");
         }
         //fetch all users, then setAllUsers(result)
         const psych1 = {
             name: "Psychologist1",
-            type: "psychologist",
+            type: "Psychologist",
             id: 1,
             email: "csirke@pulyka.ru",
             phone: "+361/123-4567",
@@ -39,7 +39,7 @@ export default function AdminEditUser(){
     
           const client1 = {
             name: "Client1",
-            type: "client",
+            type: "Client",
             id: 2,
             email: "csirke@pulyka.ru",
             phone: "+361/123-4567",
@@ -55,7 +55,7 @@ export default function AdminEditUser(){
     
           const manager1 = {
             name: "Manager1",
-            type: "manager",
+            type: "Manager",
             id: 3,
             email: "csirke@pulyka.ru",
             phone: "+361/123-4567",
@@ -71,7 +71,7 @@ export default function AdminEditUser(){
     
           const admin1 = {
             name: "Admin1",
-            type: "admin",
+            type: "Admin",
             id: 4,
             email: "csirke@pulyka.ru",
             phone: "+361/123-4567",

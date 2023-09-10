@@ -3,7 +3,7 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { UserProvider } from "./UserProvider";
 import { UserContext } from "../UserContext";
 import { useNavigate, useLocation } from 'react-router-dom';
-import ServerUrlAndPort from '../ServerURLAndPort.js';
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function NavBar(){
 
@@ -12,7 +12,8 @@ export default function NavBar(){
     const navigate = useNavigate();
 
     useEffect(() => {
-        retreiveUser();
+        
+      //retreiveUser();
     }, [user]);
 
     useEffect(() => {
@@ -27,8 +28,20 @@ export default function NavBar(){
     }
 
     const handleLogout = () => {
+      fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      })
+      .then((response) => response.text())
+      .then(data => {
         logout();
         navigate("/login");
+      })
+      .catch(info => console.log(info));
+      
     };
 
     return (
@@ -44,11 +57,11 @@ export default function NavBar(){
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto">
                 {user == null ? <Nav.Link href="/login">Log In</Nav.Link> : null}
-                {user && user.type != "admin" && user.type != "manager" && <Nav.Link href="/calendar">My Events</Nav.Link>}
-                {user && user.type != "client" && <Nav.Link href="/locations">Locations</Nav.Link>}
+                {user && user.type != "Admin" && user.type != "Manager" && <Nav.Link href="/calendar">My Events</Nav.Link>}
+                {user && user.type != "Client" && <Nav.Link href="/locations">Locations</Nav.Link>}
                 <Nav.Link href="/financials">Financials</Nav.Link>
-                {user && user.type === "admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
-                {user && user.type === "manager" ? <Nav.Link href="/manager">Management</Nav.Link> : null}
+                {user && user.type === "Admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
+                {user && user.type === "Manager" ? <Nav.Link href="/manager">Management</Nav.Link> : null}
                 <span className={`nav-link ${online ? 'text-success' : 'text-danger'}`}>
                   {online ? 'Online' : 'Offline'}
                 </span>
@@ -61,9 +74,9 @@ export default function NavBar(){
                   } value="">
                   <option disabled value="">Profile Menu</option>
                   <option value="/profile">My Profile</option>
-                  {user && user.type != "client" && <option value="/slots/edit">Slots</option>}
+                  {user && user.type != "Client" && <option value="/slots/edit">Slots</option>}
                   <option value="/appointments">Appointments</option>
-                  {user && user.type == "psychologist" && <option value="/profile/myclients">Clients</option>}
+                  {user && user.type == "Psychologist" && <option value="/profile/myclients">Clients</option>}
                   {user != null && <option value="logout">Log out</option>}
                 </select>
               </Nav>

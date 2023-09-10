@@ -14,7 +14,7 @@ export default function MainPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type == "admin" || retreivedUser.type == "manager"){
+        } else if (retreivedUser.type == "Admin" || retreivedUser.type == "Manager"){
             navigate("/locations");
         }
     }, [user]);
@@ -30,7 +30,7 @@ export default function MainPage(){
     return(
         <div>
             <h1>Your Events</h1>
-            {user != null && (user.type == "psychologist" || user.type == "client") ? <button onClick={() => 
+            {user != null && (user.type == "Psychologist" || user.type == "Client") ? <button onClick={() => 
                 navigate("/appointments/add")}>Add Appointment</button> : null}
             <CalendarV02 />
         </div>

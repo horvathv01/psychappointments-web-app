@@ -26,24 +26,24 @@ export default function Financials(){
     useEffect(() => {
         if(user != null){
         switch (user.type) {
-            case "admin":
+            case "Admin":
                 //fetch all location names
                 //setAllLocations(locationFetchResult)
                 //fetch all psychologist names
                 //setAllPsychologists(psychologistFetchResult)
                 break;
-            case "psychologist":
+            case "Psychologist":
                 //fetch /financials/user + user.id --> returns financialData with income and bills
                 //financialData.income = {[{location: "locationName", total: 100000]}, [...]}
                 //financialData.bills = {[{location: "locationName", total: 10000}]}, [...]}
                 //setFinances(fetchResult);
                 break;
-            case "manager":
+            case "Manager":
                 //fetch /financials/location + user.id --> returns financialData for associated locations
                 //financialData.income = {[{location: "locationName", total: 100000, sessions: {sessionStart, sessionEnd, psychologist, roomNumber, price, psychologistIncome}}]}
                 //setFinances(fetchResult);
                 break;
-            case "client":
+            case "Client":
                 //fetch financials/user + user.id --> returns financialData with person's sessions
                 //financialData.bills = {[{location: "locationName", sessions: {sessionStart, sessionEnd, psychologist, roomNumber, price}}]}
                 //setFinances(fetchResult);
@@ -207,13 +207,13 @@ export default function Financials(){
             return null;
         }
         switch (user.type) {
-            case "admin":
+            case "Admin":
                 return <GenerateAdmin />;
-            case "psychologist":
+            case "Psychologist":
                 return <GeneratePsychologist/>;
-            case "manager":
+            case "Manager":
                 return  <GenerateManager />;
-            case "client":
+            case "Client":
                 return <GenerateClient />;
             default:
                 break;

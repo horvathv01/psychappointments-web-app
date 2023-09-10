@@ -22,14 +22,14 @@ export default function Registration(){
     const [street, setStreet] = useState("");
     const [addressRest, setAddressRest] = useState("");
 
-    const [userType, setUserType] = useState("client");
+    const [userType, setUserType] = useState("Client");
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const retreivedUser = retreiveUser();
         if(retreivedUser != null){
-            if(retreivedUser.type == "client"){
+            if(retreivedUser.type == "Client"){
                 navigate("/unauthorized");
             } else {
                 setRegisteredBy(retreivedUser);

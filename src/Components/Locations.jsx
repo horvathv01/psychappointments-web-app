@@ -34,7 +34,7 @@ export default function Locations(){
 
     function getLocations(){
         let locations = [];
-        if(user != null && user.type == "manager"){
+        if(user != null && user.type == "Manager"){
         //only fetch associated locations
 
         }
@@ -48,7 +48,7 @@ export default function Locations(){
             <div>
                 <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
                     <option value="" disabled>Choose Location</option>
-                    {user && user.type == "psychologist" ? locations.map(l => l.psychologists.includes(user) ? 
+                    {user && user.type == "Psychologist" ? locations.map(l => l.psychologists.includes(user) ? 
                     <option value={l}>{l.name} *</option> 
                     : <option value={l}>{l.name}</option>) 
                     : locations.map(l => <option value={l}>{l.name}</option>)}
@@ -65,7 +65,7 @@ export default function Locations(){
             </div>
             <div>
             <h1>Location's events</h1>
-            {user != null && user.type == "psychologist" ? <button onClick={() => navigate("/addappointment")}>Add Appointment</button> : null}
+            {user != null && user.type == "Psychologist" ? <button onClick={() => navigate("/addappointment")}>Add Appointment</button> : null}
             <CalendarV02 events={events}/>
             </div>
         </div>

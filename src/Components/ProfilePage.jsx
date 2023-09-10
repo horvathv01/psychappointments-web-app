@@ -41,8 +41,8 @@ export default function ProfilePage(){
     return(<div>
         <h1>Profile Page</h1>
         {!edit && <button onClick={() => setEdit(!edit)}>Edit own profile</button>}
-        {user && user.type != "client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
-        {user && user.type != "client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
+        {user && user.type != "Client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
+        {user && user.type != "Client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
         <button onClick={() => navigate("/appointments/add")}>Add Appointments</button>
         <button onClick={() => navigate("/appointments")}>My Appointments</button>
         <button onClick={() => navigate("/profile/myclients")}>My Clients</button>
@@ -89,7 +89,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
     const [addressRest, setAddressRest] = useState(!newRegistration ? user.address.rest : "");
 
     const [registeredBy, setRegisteredBy] = useState(registeredByUser);
-    const [userType, setUserType] = useState(!newRegistration ? user.type : "client");
+    const [userType, setUserType] = useState(!newRegistration ? user.type : "Client");
 
 
     useEffect(() => {
@@ -177,7 +177,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
                 <option value="client">Client</option>
                 <option value="psychologist">Psychologist</option>
                 <option value="manager">Manager</option>
-                {loggedIn && loggedIn.type == "admin" && <option value="admin">Admin</option>}
+                {loggedIn && loggedIn.type == "Admin" && <option value="Admin">Admin</option>}
                 </select>
             </div>
         )
@@ -186,7 +186,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
 
     return( 
     <div>
-    {loggedIn && (loggedIn.type == "admin" || loggedIn.type == "manager") && <SelectUserType />}
+    {loggedIn && (loggedIn.type == "Admin" || loggedIn.type == "Manager") && <SelectUserType />}
     <div>
     <Form onSubmit={(e) => {
         e.preventDefault();

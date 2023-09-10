@@ -10,7 +10,7 @@ export default function ManagerPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "manager" && retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "Manager" && retreivedUser.type != "Admin"){
             navigate("/unauthorized");
         }
     }, [user]);
