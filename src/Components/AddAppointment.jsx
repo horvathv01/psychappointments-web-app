@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function AddAppointment(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -24,7 +25,6 @@ export default function AddAppointment(){
             setClient(retreivedUser);
         }
     }, [user, client]);
-
 
     function handleSubmit(){
         //validate data --> same as registration validator!
@@ -95,9 +95,9 @@ export function GetLocations({handleLocationChange}){
 
     return(
         <div>
-            <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
+            <select onChange={(e) => handleLocationChange(locations[e.target.value])} defaultValue="">
                 <option value="" disabled>Choose Location</option>
-                {locations.map(l => <option value={l}>{l.name}</option>)}
+                {locations.map((l, index) => <option value={index}>{l.name}</option>)}
             </select>
         </div>
     )
@@ -113,6 +113,18 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
             navigate("/loginfirst");
         }
         if(retreivedUser.type != "Psychologist"){
+            fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+            .then(data => data.json())
+            .then(info => {
+                setAllPsychologists(info)
+            })
+            .catch(error => console.log(error));
             //fetch all psychologists with associated location
             //setAllPsychologists(result)
         } else {
@@ -120,10 +132,10 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
         }
     }, [user, location]);
 
-
+    
     if(psychologist != null){
         return(
-            <p>{psychologist.name}</p>
+            <div><p>{psychologist.name}</p><button onClick={() => setPsychologist(null)}>Change</button></div>
         );
     } else {
         return(
@@ -132,12 +144,12 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
     };
 };
 
-export function GenerateListOfPsychologists(allPsychologists, setPsychologist){
+export function GenerateListOfPsychologists({allPsychologists, setPsychologist}){
 
     return(
-        <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
+        <select onChange={(e) => setPsychologist(allPsychologists[e.target.value])} defaultValue="">
                 <option value="" disabled>Choose Psychologist</option>
-                {allPsychologists.length > 0 && allPsychologists.map(p => <option value={p}>{p.name}</option>)}
+                {allPsychologists.length > 0 && allPsychologists.map((p, index) => <option key={"psychologist" + p.name} value={index}>{p.name}</option>)}
         </select>
     );
 };
@@ -165,11 +177,12 @@ export function GetTimeSlots({psychologist, empty, setSlot}){
         );
     } else {
         let slots = [];
+
         //fetch available time slots of chosen psychologist
         return(<div>
-            <select onChange={(e) => setSlot(e.target.value)} defaultValue="">
+            <select onChange={(e) => setSlot(allSlots[e.target.value])} defaultValue="">
                 <option value="" disabled>Choose Slot</option>
-                {allSlots.map(s => <option value={s}>{s.name}</option>)}
+                {allSlots.map((s, index) => <option key={"slot"+index} value={index}>{s.SlotStart} - {s.SlotEnd}</option>)}
             </select>
         </div>
     );
