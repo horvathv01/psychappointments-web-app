@@ -10,7 +10,7 @@ export default function AdminPage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "Admin"){
             navigate("/unauthorized");
         }
     }, [user]);

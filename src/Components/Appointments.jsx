@@ -15,13 +15,13 @@ export default function Appointments(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "psychologist" && retreivedUser.type != "admin"){
+        } else if (retreivedUser.type != "Psychologist" && retreivedUser.type != "Admin"){
             navigate("/unauthorized");
         }
         if(retreivedUser.type == "psychologist"){
             setPsychologist(retreivedUser);
         //fetch all clients, sessions included
-        } else if (retreivedUser.type == "admin"){
+        } else if (retreivedUser.type == "Admin"){
         //fetch all psychologists, choose the one you want to see from list
         //setAllPsychologists(result)
         }
@@ -51,7 +51,7 @@ export default function Appointments(){
     return(<div>    
         <h1>Appointments</h1>
         <button onClick={() => navigate("/appointments/add")}>Add New Appointment</button>
-        {user && user.type == "admin" && <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist}/>}
+        {user && user.type == "Admin" && <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist}/>}
         {allAppointments && allAppointments.map(appointment => <AppointmentDetails key={"appointment" + appointment.id} appointment={appointment}/>)}
     </div>);
 

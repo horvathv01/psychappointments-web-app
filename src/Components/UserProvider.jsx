@@ -1,19 +1,22 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { UserContext } from "../UserContext";
 
 export const UserProvider = ({children}) => {
 const [user, setUser] = useState(null);
+
 const login = (userData) => {
-    console.log(`User logged in: ${JSON.stringify(userData)}`);
+    
+    console.log(userData);
+    //console.log(`User logged in: ${JSON.stringify(userData)}`);
     //save user to session storage!
     sessionStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
 };
 
-const logout = async () => {
+const logout = () => {
     console.log("LOGOUT");
     //clear session storage!
-    await sessionStorage.clear();
+    sessionStorage.clear();
     setUser(null);
 };
 
@@ -24,13 +27,14 @@ const retreiveUser = () => {
     }
     //if page reloads and context user is empty
     const storedUserString = sessionStorage.getItem("user");
-    if(storedUserString != null){
+    if (storedUserString !== undefined && storedUserString !== null) {
         const storedUser = JSON.parse(storedUserString);
         setUser(storedUser);
         console.log("User successfully retreived from sessionStorage");
         return storedUser;
     } else {
         console.log("User could not be retreived from sessionStorage");
+        //logout();
         return null;
     }
 };

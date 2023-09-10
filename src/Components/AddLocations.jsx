@@ -18,9 +18,9 @@ export default function AddLocations(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type == "psychologist" || retreivedUser.type == "client"){
+        } else if (retreivedUser.type == "Psychologist" || retreivedUser.type == "Client"){
             navigate("/unauthorized");
-        } else if (retreivedUser.type == "manager"){
+        } else if (retreivedUser.type == "Manager"){
             let newManagers = [];
             newManagers.push(retreivedUser);
             setManagers(newManagers);

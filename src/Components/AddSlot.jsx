@@ -22,9 +22,9 @@ export default function AddSlot(){
         if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        if(retreivedUser.type == "psychologist"){
+        if(retreivedUser.type == "Psychologist"){
             setPsychologist(retreivedUser);
-        } else if (retreivedUser.type == "client"){
+        } else if (retreivedUser.type == "Client"){
             navigate("/unauthorized");
         }
 

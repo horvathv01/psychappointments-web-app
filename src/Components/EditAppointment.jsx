@@ -23,7 +23,7 @@ export default function EditAppointment(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type == "client"){
+        } else if (retreivedUser.type == "Client"){
             navigate("/unauthorized");
         }
         const queryString = window.location.search;

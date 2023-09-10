@@ -20,7 +20,7 @@ export default function AddAppointment(){
         if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        if (retreivedUser.type == "client"){
+        if (retreivedUser.type == "Client"){
             setClient(retreivedUser);
         }
     }, [user, client]);
@@ -86,7 +86,7 @@ export default function AddAppointment(){
 export function GetLocations({handleLocationChange}){
     const {user, retreiveUser} = useContext(UserContext);
     let locations = [];
-    if(user != null && (user.type == "psychologist" || user.type == "manager")){
+    if(user != null && (user.type == "Psychologist" || user.type == "Manager")){
     //only fetch associated locations
     //setAllPsychologists(fetchedData)
     }
@@ -112,7 +112,7 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
         if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        if(retreivedUser.type != "psychologist"){
+        if(retreivedUser.type != "Psychologist"){
             //fetch all psychologists with associated location
             //setAllPsychologists(result)
         } else {
@@ -212,7 +212,7 @@ export function GenerateClientDataFields({user, client}) {
       Object.entries(clientFormFields).map(([fieldName, fieldProps]) => {
         return [
           fieldName,
-          user && user.type === "client" && client ? client[fieldProps.label] : ""
+          user && user.type === "Client" && client ? client[fieldProps.label] : ""
         ];
       })
     );

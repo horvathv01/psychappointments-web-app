@@ -2,22 +2,22 @@ import React, {useState, useEffect, useContext} from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
 import ServerURLAndPort from "../ServerURLAndPort";
 
 
 export default function LoginPage(){
-    const {user, login, logout} = useContext(UserContext);
+    const {user, login, logout, retreiveUser} = useContext(UserContext);
 
-    const [userName, setUserName] = useState("");
+    const [userEmail, setUserEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
 
     const handleLoginTest = ()  => {
+
       const psych1 = {
         name: "Psychologist1",
-        type: "psychologist",
+        type: "Psychologist",
         id: 1,
         email: "csirke@pulyka.ru",
         phone: "+361/123-4567",
@@ -33,7 +33,7 @@ export default function LoginPage(){
 
       const client1 = {
         name: "Client1",
-        type: "client",
+        type: "Client",
         id: 2,
         email: "csirke@pulyka.ru",
         phone: "+361/123-4567",
@@ -49,7 +49,7 @@ export default function LoginPage(){
 
       const manager1 = {
         name: "Manager1",
-        type: "manager",
+        type: "Manager",
         id: 3,
         email: "csirke@pulyka.ru",
         phone: "+361/123-4567",
@@ -65,7 +65,7 @@ export default function LoginPage(){
 
       const admin1 = {
         name: "Admin1",
-        type: "admin",
+        type: "Admin",
         id: 4,
         email: "csirke@pulyka.ru",
         phone: "+361/123-4567",
@@ -79,14 +79,18 @@ export default function LoginPage(){
       }
       }
 
-      login(admin1);
+      login(admin);
       navigate("/");
     };
 
-    const handleLogin = () => {
-        const credentialsParsed = btoa(`${userName}:${password}`);
-        //fetch data based on userName and password
-        fetch(`${ServerUrlAndPort().host}://${ServerUrlAndPort().url}:${ServerUrlAndPort().port}/access/login`, {
+    const handleLogin = async () => {
+      if(userEmail == "" || password == ""){
+        window.alert("Please input credentials!");
+        return;
+      }
+        const credentialsParsed = btoa(`${userEmail}:${password}`);
+        //fetch data based on userEmail and password
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -98,13 +102,16 @@ export default function LoginPage(){
             if(response.ok){
                 return response.json();
             } else {
-                setUserName("");
+                setUserEmail("");
                 setPassword("");
-                window.alert("Invalid username or password!");
+                window.alert("Invalid email or password!");
             }
           })
-          .then(data => login(data));
-          navigate("/");
+          .then(data => {
+            login(data);
+            retreiveUser();
+            navigate("/");
+          });
     };
 
     const handleRegister = () => {
@@ -118,12 +125,12 @@ export default function LoginPage(){
           <Row className="mb-3 justify-content-center">
             <Col xs={8} sm={6} md={4} lg={3}>
               <Form.Group controlId="formGridName">
-                <Form.Label>User name</Form.Label>
+                <Form.Label>User email</Form.Label>
                 <Form.Control
                   type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  placeholder="Enter user name"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  placeholder="Enter email"
                 />
               </Form.Group>
             </Col>
@@ -145,7 +152,7 @@ export default function LoginPage(){
 
           <Row className="mb-3 justify-content-center">
             <Col xs={12} sm={12} className="text-center mb-3">
-              <Button variant="primary" onClick={handleLoginTest} className="m-2">
+              <Button variant="primary" onClick={handleLogin} className="m-2">
                 Login
               </Button>
               <Button variant="secondary" onClick={handleRegister}>
