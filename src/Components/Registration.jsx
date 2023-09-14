@@ -3,6 +3,7 @@ import { Button, Col, Form, Row} from 'react-bootstrap';
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { EditProfile } from "./ProfilePage";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function Registration(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -37,30 +38,41 @@ export default function Registration(){
         }
     }, [user]);
 
+    function validateUser(){
+        if(!validatePassword(password, passwordConfirm)) {window.alert("Password validation failed"); return false};
+        if(!validatePhone(phone)) {window.alert("Phone validation failed"); return false};
+        if(!validateEmail(email)) {window.alert("Email validation failed"); return false};
+        if(!validateAddress(country, zip, city, street, addressRest)) {window.alert("Address validation failed"); return false};
+        if(!validateUserName(firstName, lastName)) {window.alert("User name validation failed"); return false};
+        if(!validateBirthDate(birthDate)) {window.alert("Birth date validation failed"); return false};
+
+        return true;
+    }
+
     
 
     function register(userDto){
-        
-      
-        //   fetch(`${ServerUrlAndPort().host}://${ServerUrlAndPort().url}:${ServerUrlAndPort().port}/access/register`, {
-        //     method: 'POST',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //     credentials: 'include',
-        //     body: JSON.stringify(userDto)
-        //   })
-        //     .then(response => {
-        //       if (response.ok) {
-        //         window.alert("Registration successful! Please log in!");
-        //         navigate('/login');
-        //       } else {
-        //         window.alert("Something went wrong!");
-        //       }
-        //     })
-        //     .catch(error => {
-        //       console.log(error.message);
-        //     });
+
+              console.log(userDto);
+          fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/registration`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(userDto)
+          })
+            .then(response => {
+              if (response.ok) {
+                window.alert("Registration successful! Please log in!");
+                navigate('/login');
+              } else {
+                window.alert("Something went wrong!");
+              }
+            })
+            .catch(error => {
+              console.log(error.message);
+            });
         }
 
 
@@ -72,12 +84,15 @@ export default function Registration(){
 
 
 export function validatePassword(pw1, pw2){
-    /*if(!checkPasswordMatch(pw1, pw2)) return false;
+    
+    if(!checkPasswordMatch(pw1, pw2)) return false;
+    /*
     if(pw1.length < 6) return false;
     if(!/[A-Z]/.test(pw1)) return false;
     if(!/[a-z]/.test(pw1)) return false;
     if(!/\d/.test(pw1)) return false;
-    if(!/[!@+#$%^&*]/.test(pw1)) return false;*/
+    if(!/[!@+#$%^&*]/.test(pw1)) return false;
+    */
     return true;
 }
 

@@ -6,7 +6,9 @@ const [user, setUser] = useState(null);
 
 const login = (userData) => {
     
-    console.log(userData);
+    if(userData == undefined){
+        return;
+    }
     //console.log(`User logged in: ${JSON.stringify(userData)}`);
     //save user to session storage!
     sessionStorage.setItem("user", JSON.stringify(userData));
@@ -27,7 +29,7 @@ const retreiveUser = () => {
     }
     //if page reloads and context user is empty
     const storedUserString = sessionStorage.getItem("user");
-    if (storedUserString !== undefined && storedUserString !== null) {
+    if (storedUserString != "undefined" && storedUserString != null) {
         const storedUser = JSON.parse(storedUserString);
         setUser(storedUser);
         console.log("User successfully retreived from sessionStorage");
