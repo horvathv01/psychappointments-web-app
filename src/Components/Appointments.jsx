@@ -16,7 +16,7 @@ export default function Appointments(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
-        } else if (retreivedUser.type != "Psychologist" && retreivedUser.type != "Admin"){
+        } else if (retreivedUser.type == "Manager"){
             navigate("/unauthorized");
         }
         if(retreivedUser.type == "psychologist"){

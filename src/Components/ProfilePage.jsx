@@ -147,26 +147,29 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         if(!validateUserInput()){
             return;
         }
-        const userName = firstName + " " + lastName;
-        const address = {
-            country: country,
-            zip: zip,
-            city: city,
-            street: street,
-            rest: addressRest
-        }
 
         const userDto = {
-            name: userName,
-            email: email,
-            password: password,
-            phone: phone,
-            type: userType,
-            dateOfBirth: birthDate,
-            address: address,
-            registeredBy: registeredBy,
-            type: userType
-          };
+          Id: 0,
+          Name: firstName + " " + lastName,
+          Type: "Client",
+          Email: email,
+          Phone: phone,
+          DateOfBirth: birthDate,
+          Address: {
+              Country: country,
+              Zip: zip,
+              City: city,
+              Street: street,
+              Rest: addressRest
+          },
+          Password: password,
+          RegisteredBy: registeredBy,
+          SessionIds: [],
+          PsychologistIds: [],
+          ClientIds: null,
+          SlotIds: null,
+          LocationIds: null
+      };
           saveProfile(userDto);
     }
 
