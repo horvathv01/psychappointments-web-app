@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function AddLocations(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -26,8 +27,30 @@ export default function AddLocations(){
             setManagers(newManagers);
         }
 
-        //fetch all psychologists, setAllPsychologists(result)
-        //fetch all managers, setAllManagers(managerResult)
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allmanagers`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(data => data.json())
+        .then(info => {
+            setAllManagers(info)
+        })
+
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(data => data.json())
+        .then(info => {
+            setAllPsychologists(info)
+        })
+
     }, [user]);
 
     function submit(){
@@ -64,44 +87,46 @@ export default function AddLocations(){
         return true;
     }
 
-    function addManager(manager){
-        newManagers = [...managers];
+    function addManager(managerId){
+        const manager = allManagers.filter(man => man.id == managerId)[0];
+        let newManagers = [...managers];
         newManagers.push(manager);
         setManagers(newManagers);
     }
 
-    function addPsychologist(psychologist){
-        newPsychologists = [...psychologists];
+    function addPsychologist(psychologistId){
+        const psychologist = allPsychologists.filter(psy => psy.id == psychologistId)[0];
+        let newPsychologists = [...psychologists];
         newPsychologists.push(psychologist);
         setPsychologists(newPsychologists);
     }
 
     function setCountry(country){
-        newAddress = {...address};
+        let newAddress = {...address};
         address.Country = country;
         setAddress(newAddress);
     }
 
     function setCity(city){
-        newAddress = {...address};
+        let newAddress = {...address};
         address.City = city;
         setAddress(newAddress);
     }
 
     function setZip(zip){
-        newAddress = {...address};
+        let newAddress = {...address};
         address.Zip = zip;
         setAddress(newAddress);
     }
 
     function setStreet(street){
-        newAddress = {...address};
+        let newAddress = {...address};
         address.Street = street;
         setAddress(newAddress);
     }
 
     function setRestOfAddress(rest){
-        newAddress = {...address};
+        let newAddress = {...address};
         address.Rest = rest;
         setAddress(newAddress);
     }
@@ -129,21 +154,23 @@ export default function AddLocations(){
                 <input type="text" id="restOfAddress" name="restOfAddress" onChange={(e) => setRestOfAddress(e.target.value)}/><br /><br />
 
                 <label htmlFor="selectOption1">Add Manager:</label>
-                <select id="selectOption1" name="selectOption1" onChange={(e) => addManager(e.target.value)}>
-                    {allManagers.map(man => <option key={"manager" + man.Id} value={man}>{man.Name}</option>)}
+                <select id="selectOption1" name="selectOption1" onChange={(e) => addManager(e.target.value)} defaultValue={""}>
+                    <option value={""}>Choose manager</option>
+                    {allManagers.map(man => <option key={"manager" + man.id} value={man.id}>{man.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="selectOption2">Add Psychologist:</label>
-                <select id="selectOption2" name="selectOption2" onChange={(e) => addPsychologist(e.target.value)}>
-                {allPsychologists.map(psy => <option key={"psychologist" + psy.Id} value={psy}>{psy.Name}</option>)}
+                <select id="selectOption2" name="selectOption2" onChange={(e) => addPsychologist(e.target.value)} defaultValue={""}>
+                <option value={""}>Choose psychologist</option>
+                {allPsychologists.map(psy => <option key={"psychologist" + psy.id} value={psy.id}>{psy.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="managers">Managers:</label>
                 <ul id="managers"></ul><br /><br />
-                {managers.map(man => <li key={"registeredMan" + man.Id}>{man.Name}</li>)}
+                {managers.map(man => <li key={"registeredMan" + man.id}>{man.name}</li>)}
                 <label htmlFor="psychologists">Psychologists:</label>
                 <ul id="psychologists"></ul><br /><br />
-                {psychologists.map(psy => <li key={"registeredPsy" + psy.Id}>{psy.Name}</li>)}
+                {psychologists.map(psy => <li key={"registeredPsy" + psy.id}>{psy.name}</li>)}
                 <input type="submit" value="Submit" />
             </form>
         </div>

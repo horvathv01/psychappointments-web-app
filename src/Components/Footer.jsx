@@ -1,11 +1,11 @@
-
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function Footer(){
     const date = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     function prepopulate(){
-        fetch("http://localhost:5082/prepopulate", {
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:5082/prepopulate`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
