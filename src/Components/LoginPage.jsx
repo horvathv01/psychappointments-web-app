@@ -88,7 +88,6 @@ export default function LoginPage(){
         window.alert("Please input credentials!");
         return;
       }
-      console.log("password: " + password);
         const credentialsParsed = btoa(`${userEmail}:${password}`);
         //fetch data based on userEmail and password
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/login`, {
