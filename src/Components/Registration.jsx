@@ -52,7 +52,7 @@ export default function Registration(){
     
 
     function register(userDto){
-
+          //url should depend on whether user is logged in or not to prevent arbitrary choice of user type for hackers
               console.log(userDto);
           fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/registration`, {
             method: 'POST',

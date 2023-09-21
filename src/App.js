@@ -25,7 +25,7 @@ import AddSlot from './Components/AddSlot';
 import EditSlot from './Components/EditSlot';
 import AddLocations from './Components/AddLocations';
 import EditLocations from './Components/EditLocations';
-import RegistrationPsychologistTest from './Components/RegistrationPsychologistTest';
+import RegistrationSpecial from './Components/RegistrationSpecial';
 
 function App() {
 
@@ -42,7 +42,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/loginfirst" element={<LoginFirst />} />
                 <Route path="/registration" element={<Registration />} />
-                <Route path="/registerpsychologist" element={<RegistrationPsychologistTest />}/>
+                <Route path="/registration/special" element={<RegistrationSpecial />}/>
                 <Route path="/error" element={<Error />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
 

@@ -34,7 +34,12 @@ export default function AddLocations(){
             },
             credentials: 'include',
         })
-        .then(data => data.json())
+        .then(response => {
+            if(!response.ok){
+                console.log("AllManagers fetch failed.");
+                return [];
+            }
+            return response.json()})
         .then(info => {
             setAllManagers(info)
         })
@@ -46,7 +51,12 @@ export default function AddLocations(){
             },
             credentials: 'include',
         })
-        .then(data => data.json())
+        .then(response => {
+            if(!response.ok){
+                console.log("AllPsychologists fetch failed.");
+                return [];
+            }
+            return response.json()})
         .then(info => {
             setAllPsychologists(info)
         })
@@ -65,7 +75,16 @@ export default function AddLocations(){
             Psychologists: psychologists
         }
 
-
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(location)
+        })
+        .then(response => response.text())
+        .then(info => window.alert(info))
     }
 
     function validateInput(){

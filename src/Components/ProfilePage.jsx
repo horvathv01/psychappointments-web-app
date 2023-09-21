@@ -151,7 +151,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         const userDto = {
           Id: 0,
           Name: firstName + " " + lastName,
-          Type: "Client",
+          Type: userType,
           Email: email,
           Phone: phone,
           DateOfBirth: birthDate,
@@ -177,9 +177,9 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         return(
             <div>
                 <select defaultValue="client" onChange={(e) => setUserType(e.target.value)}>Select User Type
-                <option value="client">Client</option>
-                <option value="psychologist">Psychologist</option>
-                <option value="manager">Manager</option>
+                <option value="Client">Client</option>
+                <option value="Psychologist">Psychologist</option>
+                <option value="Manager">Manager</option>
                 {loggedIn && loggedIn.type == "Admin" && <option value="Admin">Admin</option>}
                 </select>
             </div>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { EditProfile } from "./ProfilePage";
 import ServerURLAndPort from "../ServerURLAndPort";
 
-export default function RegistrationPsychologistTest(){
+export default function RegistrationSpecial(){
     const {user, retreiveUser} = useContext(UserContext);
     const [registeredBy, setRegisteredBy] = useState(null);
 
@@ -53,7 +53,7 @@ export default function RegistrationPsychologistTest(){
 
     function register(userDto){
 
-              userDto.Type = "Psychologist";
+              userDto.Type = "Admin";
               console.log(userDto);
           fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/registration`, {
             method: 'POST',

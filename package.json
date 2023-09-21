@@ -21,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "https": "HTTPS=true SSL_CRT_FILE=PsychAppointmentsFrontEnd.crt SSL_KEY_FILE=PsychAppointmentsFrontEnd.key react-scripts start"
   },
   "browserslist": {
     "production": [
