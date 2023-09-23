@@ -26,6 +26,18 @@ export default function AddAppointment(){
         }
     }, [user, client]);
 
+    function getLocationData(id){
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${location.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(info => setLocation(info))
+    }
+
     function handleSubmit(){
         //validate data --> same as registration validator!
         //what to include? 
@@ -57,7 +69,7 @@ export default function AddAppointment(){
             <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
-                    <GetLocations handleLocationChange={setLocation} />
+                    <GetLocations handleLocationChange={getLocationData} />
                     <p>Psychologist: </p>
                     <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
                     <p>Client: </p>
@@ -85,19 +97,28 @@ export default function AddAppointment(){
 
 export function GetLocations({handleLocationChange}){
     const {user, retreiveUser} = useContext(UserContext);
-    let locations = [];
-    if(user != null && (user.type == "Psychologist" || user.type == "Manager")){
-    //only fetch associated locations
-    //setAllPsychologists(fetchedData)
-    }
+    const [allLocations, setAllLocations] = useState([]);
+
     //fetch all locations
     //setAllPsychologists(fetchedData)
+    useEffect(() => {
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(info => setAllLocations(info));
+    }, [])
+
 
     return(
         <div>
-            <select onChange={(e) => handleLocationChange(locations[e.target.value])} defaultValue="">
+            <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
                 <option value="" disabled>Choose Location</option>
-                {locations.map((l, index) => <option value={index}>{l.name}</option>)}
+                {allLocations.length > 0 && allLocations.map(l => <option key={"location" + l.id} value={l.id}>{l.name}</option>)}
             </select>
         </div>
     )

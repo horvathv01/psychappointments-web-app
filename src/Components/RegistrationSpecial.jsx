@@ -9,21 +9,21 @@ export default function RegistrationSpecial(){
     const {user, retreiveUser} = useContext(UserContext);
     const [registeredBy, setRegisteredBy] = useState(null);
 
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
-    const [birthDate, setBirthDate] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordConfirm, setPasswordConfirm] = useState("");
+    const [firstName, setFirstName] = useState("Vilmos Zoltán");
+    const [lastName, setLastName] = useState("Horváth");
+    const [phone, setPhone] = useState("+3670/430-5563");
+    const [email, setEmail] = useState("horvathv01@gmail.com");
+    const [birthDate, setBirthDate] = useState("1994-07-24.");
+    const [password, setPassword] = useState("1234");
+    const [passwordConfirm, setPasswordConfirm] = useState("1234");
 
-    const [country, setCountry] = useState("");
-    const [zip, setZip] = useState("");
-    const [city, setCity] = useState("");
-    const [street, setStreet] = useState("");
-    const [addressRest, setAddressRest] = useState("");
+    const [country, setCountry] = useState("Hungary");
+    const [zip, setZip] = useState("1196");
+    const [city, setCity] = useState("Budapest");
+    const [street, setStreet] = useState("Petőfi utca");
+    const [addressRest, setAddressRest] = useState("134/b");
 
-    const [userType, setUserType] = useState("Psychologist");
+    const [userType, setUserType] = useState("Admin");
 
     const navigate = useNavigate();
 
@@ -82,6 +82,8 @@ export default function RegistrationSpecial(){
         <EditProfile user={user} saveProfile={register} loggedIn={user} registeredBy={registeredBy} newRegistration={true}/>
     </div>);
 };
+
+
 
 
 export function validatePassword(pw1, pw2){

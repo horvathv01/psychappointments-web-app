@@ -63,7 +63,8 @@ export default function AddLocations(){
 
     }, [user]);
 
-    function submit(){
+    function submit(e){
+        e.preventDefault();
         if(!validateInput()){
             return;
         }
@@ -71,8 +72,8 @@ export default function AddLocations(){
         const location = {
             Name: locName,
             Address: address,
-            Managers: managers,
-            Psychologists: psychologists
+            ManagerIds: managers.map(man => man.id),
+            PsychologistIds: psychologists.map(psy => psy.id)
         }
 
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location`, {
@@ -85,6 +86,7 @@ export default function AddLocations(){
         })
         .then(response => response.text())
         .then(info => window.alert(info))
+        
     }
 
     function validateInput(){
@@ -122,38 +124,38 @@ export default function AddLocations(){
 
     function setCountry(country){
         let newAddress = {...address};
-        address.Country = country;
+        newAddress.Country = country;
         setAddress(newAddress);
     }
 
     function setCity(city){
         let newAddress = {...address};
-        address.City = city;
+        newAddress.City = city;
         setAddress(newAddress);
     }
 
     function setZip(zip){
         let newAddress = {...address};
-        address.Zip = zip;
+        newAddress.Zip = zip;
         setAddress(newAddress);
     }
 
     function setStreet(street){
         let newAddress = {...address};
-        address.Street = street;
+        newAddress.Street = street;
         setAddress(newAddress);
     }
 
     function setRestOfAddress(rest){
         let newAddress = {...address};
-        address.Rest = rest;
+        newAddress.Rest = rest;
         setAddress(newAddress);
     }
 
 
     return(
         <div>
-            <form onSubmit={submit}>
+            <form onSubmit={(e) => submit(e)}>
                 <label htmlFor="name">Name:</label>
                 <input type="text" id="name" name="name" onChange={(e) => setLocName(e.target.value)} /><br /><br />
 
