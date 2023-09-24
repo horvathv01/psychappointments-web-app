@@ -14,6 +14,9 @@ export default function EditLocations(){
     const [allPsychologists, setAllPsychologists] = useState([]);
     const [allManagers, setAllManagers] = useState([]);
 
+    const [selectedManager, setSelectedManager] = useState("");
+    const [selectedPsychologist, setSelectedPsychologist] = useState("");
+
     const navigate = useNavigate();
 
 
@@ -45,7 +48,7 @@ export default function EditLocations(){
             }
             return response.json()})
         .then(info => {
-            setAllManagers(info)
+            setAllManagers(info);
         })
 
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
@@ -62,7 +65,7 @@ export default function EditLocations(){
             }
             return response.json()})
         .then(info => {
-            setAllPsychologists(info)
+            setAllPsychologists(info);
         })
     }, [user]);
 
@@ -88,8 +91,8 @@ export default function EditLocations(){
             .then(response => response.json())
             .then(info => setPsychologists(info))
 
-            setLocName(location.Name);
-            setAddress(location.Address);
+            setLocName(location.name);
+            setAddress(location.address);
         }
     }, [location])
 
@@ -100,23 +103,23 @@ export default function EditLocations(){
             return;
         }
         //send PUT request to make changes to location
-        const location = {
+        const newLocation = {
             Name: locName,
             Address: address,
-            Managers: managers.map(man => man.id),
-            Psychologists: psychologists.map(psy => psy.id)
+            ManagerIds: managers.map(man => man.id),
+            PsychologistIds: psychologists.map(psy => psy.id)
         }
+        console.log(newLocation);
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${location.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(location)
+            body: JSON.stringify(newLocation)
         })
         .then(response => response.text())
         .then(info => window.alert(info))
-
     }
 
     function getLocationData(id){
@@ -129,7 +132,6 @@ export default function EditLocations(){
         })
         .then(response => response.json())
         .then(info => {
-            console.log(info);
             setLocation(info)})
     }
 
@@ -153,51 +155,51 @@ export default function EditLocations(){
     }
 
     function addManager(id){
-        newManagers = [...managers];
+        let newManagers = [...managers];
         const managerToAdd = allManagers.filter(man => man.id == id);
-        newManagers.push(managerToAdd);
+        managerToAdd.forEach(man => newManagers.push(man));
         setManagers(newManagers);
     }
 
     function addPsychologist(id){
-        newPsychologists = [...psychologists];
+        let newPsychologists = [...psychologists];
         const psychologistToAdd = allPsychologists.filter(psy => psy.id == id);
-        newPsychologists.push(psychologistToAdd);
+        psychologistToAdd.forEach(psy => newPsychologists.push(psy));
         setPsychologists(newPsychologists);
     }
 
     function setCountry(country){
-        newAddress = {...address};
+        let newAddress = {...address};
         newAddress.country = country;
         setAddress(newAddress);
     }
 
     function setCity(city){
-        newAddress = {...address};
+        let newAddress = {...address};
         newAddress.city = city;
         setAddress(newAddress);
     }
 
     function setZip(zip){
-        newAddress = {...address};
+        let newAddress = {...address};
         newAddress.zip = zip;
         setAddress(newAddress);
     }
 
     function setStreet(street){
-        newAddress = {...address};
+        let newAddress = {...address};
         newAddress.street = street;
         setAddress(newAddress);
     }
 
     function setRestOfAddress(rest){
-        newAddress = {...address};
+        let newAddress = {...address};
         newAddress.rest = rest;
         setAddress(newAddress);
     }
 
     function removeManager(id){
-        newManagers = [...managers];
+        let newManagers = [...managers];
         const managerToRemove = newManagers.filter(man => man.id == id);
         const index = newManagers.indexOf(managerToRemove);
         newManagers.splice(index, 1);
@@ -205,7 +207,7 @@ export default function EditLocations(){
     }
 
     function removePsychologist(id){
-        newPsychologists = [...psychologists];
+        let newPsychologists = [...psychologists];
         const psychologistToRemove = newPsychologists.filter(psy => psy.id == id);
         const index = newPsychologists.indexOf(psychologistToRemove);
         newPsychologists.splice(index, 1);
@@ -265,21 +267,31 @@ export default function EditLocations(){
                 <input type="text" id="restOfAddress" name="restOfAddress" onChange={(e) => setRestOfAddress(e.target.value)} defaultValue={location.address.rest}/><br /><br />
             
                 <label htmlFor="selectOption1">Add Manager:</label>
-                <select id="selectOption1" name="selectOption1" onChange={(e) => addManager(e.target.value)}>
-                    {allManagers.length > 0 && allManagers.map(man => <option key={"manager" + man.id} value={man.id}>{man.name}</option>)}
+                <select id="selectOption1" name="selectOption1" value={selectedManager} onChange={(e) => {
+                    addManager(e.target.value)
+                    setSelectedManager("");
+                    }}>
+                <option value="" disabled>Add new manager</option>
+                {allManagers.length > 0 && allManagers.filter(man => !arrayContains(managers, man))
+                .map(man => <option key={"manager" + man.id} value={man.id}>{man.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="selectOption2">Add Psychologist:</label>
-                <select id="selectOption2" name="selectOption2" onChange={(e) => addPsychologist(e.target.value)}>
-                {allPsychologists.length > 0 && allPsychologists.map(psy => <option key={"psychologist" + psy.id} value={psy.id}>{psy.name}</option>)}
+                <select key={"allPsychologists" + allPsychologists.length} id="selectOption2" name="selectOption2" value={selectedPsychologist} onChange={(e) => {
+                    setSelectedPsychologist("");
+                    addPsychologist(e.target.value)}
+                    }>
+                <option value="" disabled>Add new psychologist</option>
+                {allPsychologists.length > 0 && allPsychologists.filter(psy => !arrayContains(psychologists, psy))
+                .map(psy => <option key={"psychologist" + psy.id} value={psy.id}>{psy.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="managers">Managers:</label>
                 <ul id="managers"></ul><br /><br />
-                {managers.length > 0 && managers.map(man => <div key={"registeredMan" + man.id}><li>{man.name}</li><button onClick={() => removeManager(man.id)}>Remove</button></div>)}
+                {managers.length > 0 && managers.map(man => <li key={"registeredMan" + man.id}><p>{man.name}</p><button onClick={() => removeManager(man.id)}>Remove</button></li>)}
                 <label htmlFor="psychologists">Psychologists:</label>
                 <ul id="psychologists"></ul><br /><br />
-                {psychologists.length > 0 && psychologists.map(psy => <div key={"registeredPsy" + psy.id}><li>{psy.name}</li><button onClick={() => removePsychologist(psy.id)}>Remove</button></div>)}
+                {psychologists.length > 0 && psychologists.map(psy => <li key={"registeredPsy" + psy.id}><p>{psy.name}</p><button onClick={() => removePsychologist(psy.id)}>Remove</button></li>)}
                 <input type="submit" value="Submit" />
                 <button onClick={() => cancelChanges()}>Cancel</button>
                 <button onClick={() => deleteLocation()}>Delete Location</button>
@@ -294,3 +306,12 @@ export default function EditLocations(){
 //get list of psychologists to add (component with allPsychologists?)
 //show list of managers
 //show list of psychologists
+
+function arrayContains(arr, item){
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i].id == item.id){
+            return true;
+        }
+    }
+    return false;
+}
