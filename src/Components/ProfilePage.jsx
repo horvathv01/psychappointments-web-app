@@ -176,7 +176,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
     function SelectUserType(){
         return(
             <div>
-                <select defaultValue="client" onChange={(e) => setUserType(e.target.value)}>Select User Type
+                <select value={userType} onChange={(e) => setUserType(e.target.value)}>Select User Type
                 <option value="Client">Client</option>
                 <option value="Psychologist">Psychologist</option>
                 <option value="Manager">Manager</option>
