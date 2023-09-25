@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { GetLocations, GeneratePsychologistDataField, GetTimeSlots, ChooseDate } from "./AddAppointment";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function AddSlot(){
     const navigate = useNavigate();
@@ -31,23 +32,80 @@ export default function AddSlot(){
     }, [user]);
 
     useEffect(() => {
+            fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(info => setAllPsychologists(info))
+    }, [])
+
+    useEffect(() => {
         if(location == null){
         //fetch all (associated) locations
         //setAllLocations(result);
         }
     }, [psychologist]);
 
-    function handleLocationChange(loc){
-        setLocation(loc);
+    function handleLocationChange(id){
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(info => {
+        setLocation(info)})
     }
 
     function submit(){
         //validate input
-        if(!validateSlotInput(psychologist, location, date, sessionLength, slotStart, slotEnd)) return;
-        //POST request to server with new slot
-        //should be validated on backend
-        //prepopulate with blank sessions that can be edited
-        
+        if(!validateSlotInput(psychologist, location, date, sessionLength, rest, slotStart, slotEnd)) return;
+
+        const slotDTO = {
+            Id: 0,
+            PsychologistId: psychologist.id,
+            LocationId: location.id,
+            Date: date,
+            SlotStart: slotStart,
+            SlotEnd: slotEnd,
+            SessionLength: sessionLength,
+            Rest: rest,
+            Weekly: weekly
+        }
+        console.log(slotDTO);
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(slotDTO)
+        })
+        .then(response => response.text())
+        .then(info => {
+            window.alert(info);
+        })        
+    }
+
+    function handlePsychologistChange(id){
+        const chosenPsychologist = allPsychologists.filter(psy => psy.id == id)[0];
+        setPsychologist(chosenPsychologist);
+    }
+
+    function handleDateChange(date){
+        const today = new Date();
+        const newDate = new Date(date);
+        if(newDate <= today){
+            window.alert("The date has to be in the future.");
+        } else{
+        setDate(newDate);    
+        }
     }
 
 
@@ -58,9 +116,9 @@ export default function AddSlot(){
             <p>Choose Location: </p>
             <GetLocations handleLocationChange={handleLocationChange}/>
             {psychologist == null ? <p>Choose Psychologist: </p> : <p>Psychologist: </p>}
-            <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
+            <GeneratePsychologistDataField setPsychologist={handlePsychologistChange} psychologist={psychologist} location={location}/>
             <p>Choose Date: </p>
-            <ChooseDate setDate={setDate}/>
+            <ChooseDate setDate={handleDateChange}/>
             <p>Input session start: </p>
             <input type="time" onChange={(e) => setSlotStart(e.target.value)}></input>
             <p>Input session end: </p>
@@ -75,7 +133,7 @@ export default function AddSlot(){
             </select>
             {sessionLength == "custom" && <input type="number" onChange={(e) => setSessionLength(e.target.value)} defaultValue="Input custom session length"></input>}
             <p>Choose resting time between sessions: </p>
-            <select onChange={(e) => setRest(e.target.value)} defaultValue={10}>
+            <select onChange={(e) => setRest(e.target.value)} value={rest}>
             <option value={10}>10 minutes</option>
             <option value={15}>15 minutes</option>
             <option value={30}>30 minutes</option>
@@ -93,7 +151,7 @@ export default function AddSlot(){
     );
 };
 
-export function validateSlotInput(psychologist, location, date, sessionLength, slotStart, slotEnd){
+export function validateSlotInput(psychologist, location, date, sessionLength, rest, slotStart, slotEnd){
     if(psychologist == null){
         window.alert("Please choose psychologist!");
         return false;
@@ -104,7 +162,7 @@ export function validateSlotInput(psychologist, location, date, sessionLength, s
     }
     if(date == null){
         window.alert("Please choose a date!");
-        if(new Date(date).getDate() >= new Date().getDate()){
+        if(new Date(date) >= new Date()){
             window.alert("The date has to be in the future!");
             return false;
         }
