@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
+import { arrayContains } from "./EditLocations";
 import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function AddLocations(){
@@ -11,6 +12,9 @@ export default function AddLocations(){
     const [psychologists, setPsychologists] = useState([]);
     const [allPsychologists, setAllPsychologists] = useState([]);
     const [allManagers, setAllManagers] = useState([]);
+
+    const [selectedManager, setSelectedManager] = useState("");
+    const [selectedPsychologist, setSelectedPsychologist] = useState("");
 
     const navigate = useNavigate();
 
@@ -108,17 +112,17 @@ export default function AddLocations(){
         return true;
     }
 
-    function addManager(managerId){
-        const manager = allManagers.filter(man => man.id == managerId)[0];
+    function addManager(id){
         let newManagers = [...managers];
-        newManagers.push(manager);
+        const managerToAdd = allManagers.filter(man => man.id == id);
+        managerToAdd.forEach(man => newManagers.push(man));
         setManagers(newManagers);
     }
 
-    function addPsychologist(psychologistId){
-        const psychologist = allPsychologists.filter(psy => psy.id == psychologistId)[0];
+    function addPsychologist(id){
         let newPsychologists = [...psychologists];
-        newPsychologists.push(psychologist);
+        const psychologistToAdd = allPsychologists.filter(psy => psy.id == id);
+        psychologistToAdd.forEach(psy => newPsychologists.push(psy));
         setPsychologists(newPsychologists);
     }
 
@@ -152,6 +156,22 @@ export default function AddLocations(){
         setAddress(newAddress);
     }
 
+    function removeManager(id){
+        let newManagers = [...managers];
+        const managerToRemove = newManagers.filter(man => man.id == id);
+        const index = newManagers.indexOf(managerToRemove);
+        newManagers.splice(index, 1);
+        setManagers(newManagers);
+    }
+
+    function removePsychologist(id){
+        let newPsychologists = [...psychologists];
+        const psychologistToRemove = newPsychologists.filter(psy => psy.id == id);
+        const index = newPsychologists.indexOf(psychologistToRemove);
+        newPsychologists.splice(index, 1);
+        setPsychologists(newPsychologists);
+    }
+
 
     return(
         <div>
@@ -175,23 +195,31 @@ export default function AddLocations(){
                 <input type="text" id="restOfAddress" name="restOfAddress" onChange={(e) => setRestOfAddress(e.target.value)}/><br /><br />
 
                 <label htmlFor="selectOption1">Add Manager:</label>
-                <select id="selectOption1" name="selectOption1" onChange={(e) => addManager(e.target.value)} defaultValue={""}>
-                    <option value={""}>Choose manager</option>
-                    {allManagers.map(man => <option key={"manager" + man.id} value={man.id}>{man.name}</option>)}
+                <select id="selectOption1" name="selectOption1" value={selectedManager} onChange={(e) => {
+                    addManager(e.target.value)
+                    setSelectedManager("");
+                    }}>
+                <option value="" disabled>Add new manager</option>
+                {allManagers.length > 0 && allManagers.filter(man => !arrayContains(managers, man))
+                .map(man => <option key={"manager" + man.id} value={man.id}>{man.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="selectOption2">Add Psychologist:</label>
-                <select id="selectOption2" name="selectOption2" onChange={(e) => addPsychologist(e.target.value)} defaultValue={""}>
-                <option value={""}>Choose psychologist</option>
-                {allPsychologists.map(psy => <option key={"psychologist" + psy.id} value={psy.id}>{psy.name}</option>)}
+                <select key={"allPsychologists" + allPsychologists.length} id="selectOption2" name="selectOption2" value={selectedPsychologist} onChange={(e) => {
+                    setSelectedPsychologist("");
+                    addPsychologist(e.target.value)}
+                    }>
+                <option value="" disabled>Add new psychologist</option>
+                {allPsychologists.length > 0 && allPsychologists.filter(psy => !arrayContains(psychologists, psy))
+                .map(psy => <option key={"psychologist" + psy.id} value={psy.id}>{psy.name}</option>)}
                 </select><br /><br />
 
                 <label htmlFor="managers">Managers:</label>
                 <ul id="managers"></ul><br /><br />
-                {managers.map(man => <li key={"registeredMan" + man.id}>{man.name}</li>)}
+                {managers.length > 0 && managers.map(man => <li key={"registeredMan" + man.id}><p>{man.name}</p><button onClick={() => removeManager(man.id)}>Remove</button></li>)}
                 <label htmlFor="psychologists">Psychologists:</label>
                 <ul id="psychologists"></ul><br /><br />
-                {psychologists.map(psy => <li key={"registeredPsy" + psy.id}>{psy.name}</li>)}
+                {psychologists.length > 0 && psychologists.map(psy => <li key={"registeredPsy" + psy.id}><p>{psy.name}</p><button onClick={() => removePsychologist(psy.id)}>Remove</button></li>)}
                 <input type="submit" value="Submit" />
             </form>
         </div>

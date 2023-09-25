@@ -307,7 +307,7 @@ export default function EditLocations(){
 //show list of managers
 //show list of psychologists
 
-function arrayContains(arr, item){
+export function arrayContains(arr, item){
     for(let i = 0; i < arr.length; i++){
         if(arr[i].id == item.id){
             return true;
