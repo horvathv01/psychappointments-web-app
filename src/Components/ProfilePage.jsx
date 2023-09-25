@@ -4,10 +4,10 @@ import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { validateAddress, validateEmail, validatePhone, checkPasswordMatch, validatePassword, validateUserName, validateBirthDate } from "./Registration";
 
-export default function ProfilePage(){
+export default function ProfilePage({incomingUser}){
     const {user, retreiveUser, updateUser, logout} = useContext(UserContext);
     const [edit, setEdit] = useState(false);
-    const [updatedUser, setUpdatedUser] = useState(null);
+    const [editableUser, setEditableUser] = useState(null);    
 
     const navigate = useNavigate();
 
@@ -15,13 +15,12 @@ export default function ProfilePage(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
+        } if(incomingUser == undefined){
+          setEditableUser(retreivedUser);
+        } else {
+          setEditableUser(incomingUser);
         }
     }, [user]);
-
-    useEffect(() => {
-        //user has been updated in updatedUser
-        //POST fetch with new profile details to server
-    }, [updatedUser])
 
     function saveProfile(userDto){
         updateUser(userDto);
@@ -41,35 +40,35 @@ export default function ProfilePage(){
     return(<div>
         <h1>Profile Page</h1>
         {!edit && <button onClick={() => setEdit(!edit)}>Edit own profile</button>}
-        {user && user.type != "Client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
-        {user && user.type != "Client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
+        {editableUser && editableUser.type != "Client" && <button onClick={() => navigate("/slots/add")}>Add Slots</button>}
+        {editableUser && editableUser.type != "Client" && <button onClick={() => navigate("/slots/edit")}>Edit Slots</button>}
         <button onClick={() => navigate("/appointments/add")}>Add Appointments</button>
         <button onClick={() => navigate("/appointments")}>My Appointments</button>
         <button onClick={() => navigate("/profile/myclients")}>My Clients</button>
         <button onClick={() => navigate("/registration")}>Register User</button>
         <p>Profile details</p>
-        {user && !edit && <ProfileDetails user={user}/>}
-        {user && edit && <EditProfile user={user} saveProfile={saveProfile} loggedIn={user}/>}
+        {editableUser && !edit && <ProfileDetails user={editableUser}/>}
+        {useditableUserer && edit && <EditProfile user={editableUser} saveProfile={saveProfile} loggedIn={editableUser}/>}
         <br/>
         {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
         {edit && <button onClick={() => deleteProfile()}>Delete Profile</button>}
     </div>);
 };
 
-export function ProfileDetails({user}){
-    return(user && <div>
-        {<div><p>Type: </p><p>{user.type}</p></div>}
-        {<div><p>ID: </p><p>{user.id}</p></div>}
-        {<div><p>Name: </p><p>{user.name}</p></div>}
-        {<div><p>Email: </p><p>{user.email}</p></div>}
-        {<div><p>Phone: </p><p>{user.phone}</p></div>}
-        {<div><p>Birth date: </p><p>{user.dateOfBirth}</p></div>}
+export function ProfileDetails({incomingUser}){
+    return(incomingUser && <div>
+        {<div><p>Type: </p><p>{incomingUser.type}</p></div>}
+        {<div><p>ID: </p><p>{incomingUser.id}</p></div>}
+        {<div><p>Name: </p><p>{incomingUser.name}</p></div>}
+        {<div><p>Email: </p><p>{incomingUser.email}</p></div>}
+        {<div><p>Phone: </p><p>{incomingUser.phone}</p></div>}
+        {<div><p>Birth date: </p><p>{incomingUser.dateOfBirth}</p></div>}
         <p>Address: </p>
-        {<div><p>Country: </p><p>{user.address.country}</p></div>}
-        {<div><p>ZIP or Postal Code: </p><p>{user.address.zip}</p></div>}
-        {<div><p>City: </p><p>{user.address.city}</p></div>}
-        {<div><p>Street: </p><p>{user.address.street}</p></div>}
-        {<div><p>Rest of Address: </p><p>{user.address.rest}</p></div>}
+        {<div><p>Country: </p><p>{incomingUser.address.country}</p></div>}
+        {<div><p>ZIP or Postal Code: </p><p>{incomingUser.address.zip}</p></div>}
+        {<div><p>City: </p><p>{incomingUser.address.city}</p></div>}
+        {<div><p>Street: </p><p>{incomingUser.address.street}</p></div>}
+        {<div><p>Rest of Address: </p><p>{incomingUser.address.rest}</p></div>}
     </div>);
 }
 
