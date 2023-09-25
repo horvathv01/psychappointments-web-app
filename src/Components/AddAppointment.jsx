@@ -153,24 +153,21 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
         }
     }, [user, location]);
 
-    
-    if(psychologist != null){
-        return(
+    return(
+        <div>
+            {!psychologist ? <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} /> :
             <div><p>{psychologist.name}</p><button onClick={() => setPsychologist(null)}>Change</button></div>
-        );
-    } else {
-        return(
-            <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} />
-        );
-    };
+        }
+        </div>
+    );
 };
 
 export function GenerateListOfPsychologists({allPsychologists, setPsychologist}){
 
     return(
-        <select onChange={(e) => setPsychologist(allPsychologists[e.target.value])} defaultValue="">
+        <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
                 <option value="" disabled>Choose Psychologist</option>
-                {allPsychologists.length > 0 && allPsychologists.map((p, index) => <option key={"psychologist" + p.name} value={index}>{p.name}</option>)}
+                {allPsychologists.length > 0 && allPsychologists.map(p => <option key={"psychologist" + p.id} value={p.id}>{p.name}</option>)}
         </select>
     );
 };
@@ -201,9 +198,9 @@ export function GetTimeSlots({psychologist, empty, setSlot}){
 
         //fetch available time slots of chosen psychologist
         return(<div>
-            <select onChange={(e) => setSlot(allSlots[e.target.value])} defaultValue="">
+            <select onChange={(e) => setSlot(e.target.value)} defaultValue="">
                 <option value="" disabled>Choose Slot</option>
-                {allSlots.map((s, index) => <option key={"slot"+index} value={index}>{s.SlotStart} - {s.SlotEnd}</option>)}
+                {allSlots.map(s => <option key={"slot"+s.id} value={s.id}>{s.SlotStart} - {s.SlotEnd}</option>)}
             </select>
         </div>
     );
