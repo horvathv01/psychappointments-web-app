@@ -77,7 +77,7 @@ export default function AddAppointment(){
                     <p>Select date:</p>
                     <ChooseDate setDate={setDate}/>
                     <p>Select time slot for session: </p>
-                    <GetTimeSlots psychologist={psychologist} empty={true} setSlot={setSlot}/>
+                    <GetTimeSlots allSlots={allSlots} empty={true} setSlot={setSlot}/>
                     <p>Recurring session?</p>
                     <select onChange={(e) => setFrequency(e.target.value)} defaultValue="Weekly">
                         <option value="Weekly">Weekly</option>
@@ -95,7 +95,7 @@ export default function AddAppointment(){
 
 }
 
-export function GetLocations({handleLocationChange}){
+export function GetLocations({setLocation}){
     const {user, retreiveUser} = useContext(UserContext);
     const [allLocations, setAllLocations] = useState([]);
 
@@ -112,6 +112,11 @@ export function GetLocations({handleLocationChange}){
         .then(response => response.json())
         .then(info => setAllLocations(info));
     }, [])
+
+    function handleLocationChange(id){
+        const selectedLocation = allLocations.filter(loc => loc.id == id)[0];
+        setLocation(selectedLocation);
+    }
 
 
     return(
@@ -164,52 +169,34 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
 
 export function GenerateListOfPsychologists({allPsychologists, setPsychologist}){
 
+    function handlePsychologistChange(id){
+        const selectedPsychologist = allPsychologists.filter(psy => psy.id == id)[0];
+        setPsychologist(selectedPsychologist);
+    }
+
     return(
-        <select onChange={(e) => setPsychologist(e.target.value)} defaultValue="">
+        <select onChange={(e) => handlePsychologistChange(e.target.value)} defaultValue="">
                 <option value="" disabled>Choose Psychologist</option>
                 {allPsychologists.length > 0 && allPsychologists.map(p => <option key={"psychologist" + p.id} value={p.id}>{p.name}</option>)}
         </select>
     );
 };
 
-export function GetTimeSlots({psychologist, empty, setSlot}){
-    const [allSlots, setAllSlots] = useState([]);
-
-    useEffect(() => {
-        if(psychologist != null){
-            if(empty){ //empty is a boolean
-                //fetch empty time slots only
-                //setAllSlots(result)
-            } else {
-                //fetch all time slots of psychologist
-                //setAllSlots(result)
-            }
-        }
-        
-    }, [psychologist]);
-
-
-    if(psychologist == null){
-        return (
-            <p>Choose psychologist first!</p>
-        );
-    } else {
-        let slots = [];
-
-        //fetch available time slots of chosen psychologist
+export function GetTimeSlots({allSlots, empty, handleChange, slot}){
         return(<div>
-            <select onChange={(e) => setSlot(e.target.value)} defaultValue="">
+            <select onChange={(e) => handleChange(e.target.value)} value="">
                 <option value="" disabled>Choose Slot</option>
-                {allSlots.map(s => <option key={"slot"+s.id} value={s.id}>{s.SlotStart} - {s.SlotEnd}</option>)}
+                {empty && allSlots.filter(sl => sl.sessionIds.length == 0).map(sl => 
+                <option key={"slot"+sl.id} value={sl.id}>{sl.slotStart} - {sl.slotEnd}</option>)}
+                {!empty && allSlots.map(sl => <option key={"slot"+sl.id} value={sl.id}>{sl.slotStart} - {sl.slotEnd}</option>)}
             </select>
         </div>
     );
-    }
 }
 
 export function ChooseDate({setDate, date}){
     return(<div>
-        <input type="date" onChange={(e) => setDate(e.target.value)}>{date && date}</input>
+        <input type="date" onChange={(e) => setDate(e.target.value)} defaultValue={date && date}/>
     </div>);
 
 }

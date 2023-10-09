@@ -3,6 +3,8 @@ import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import { GetLocations, GeneratePsychologistDataField, GetTimeSlots, ChooseDate } from "./AddAppointment";
 import { validateSlotInput } from "./AddSlot";
+import DateRangeSelector from "./DateRangeSelector";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function EditSlot(){
     const navigate = useNavigate();
@@ -16,7 +18,11 @@ export default function EditSlot(){
     const [slotStart, setSlotStart] = useState(null); //--> registered session start for slot
     const [slotEnd, setSlotEnd] = useState(null); //--> registered session end for slot
     const [weekly, setWeekly] = useState(true); //--> weekly repetition?
-    const [allLocations, setAllLocations] = useState([]);
+    const [allSlots, setAllSlots] = useState([]);
+    const [originalSlot, setOriginalSlot] = useState();
+
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
 
     useEffect(() => {
         const retreivedUser = retreiveUser();
@@ -32,19 +38,36 @@ export default function EditSlot(){
     }, [user]);
 
     useEffect(() => {
-        if(location == null){
-        //fetch all (associated) locations
-        //setAllLocations(result);
-        }
-    }, [psychologist]);
+        if(psychologist != null && startDate != "" && endDate != ""){
 
-    function handleLocationChange(loc){
-        setLocation(loc);
-    }
+            const url = new URL(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot/psychologist/location`);
+            url.searchParams.append("psychologistId", psychologist.id.toString());
+            url.searchParams.append("locationId", location.id.toString());
+            url.searchParams.append("startDate", startDate);
+            url.searchParams.append("endDate", endDate);
+            
+            //console.log(url.toString());
+            
+            
+            fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+            .then(response => response.json())
+            .then(info => {
+                //console.log(info);
+                setAllSlots(info);
+            });
+            
+        }
+    }, [psychologist, startDate, endDate])
 
     function submit(){
         //validate input
-        if(!validateSlotInput(psychologist, location, date, sessionLength, slotStart, slotEnd)) return;
+        if(!validateSlotInput(psychologist, location, date, sessionLength, slotStart, slotEnd, startDate, endDate)) return;
         const newSlot = {
             id: slot.id,
             psychologist: psychologist,
@@ -56,20 +79,28 @@ export default function EditSlot(){
             slotEnd: slotEnd,
             weekly: weekly
         }
-        setSlot(newSlot);
-        //POST request to server with newSlot
-        //should be validated on backend
-        //prepopulate with blank sessions that can be edited
-        //show message with success/fail
+
     }
 
     function deleteSlot(){
         if(!window.confirm("Are you sure you want to delete this slot?")){
             return;
         }
-        //DELETE request to backend with current slot in body
+        //DELETE request to backend with current slot's id at end of url
         //confirm message should be shown
 
+    }
+
+    function cancel(){
+        setSlot(null);
+    }
+
+    function handleSlotChange(id){
+        //console.log(id);
+        const selectedSlot = allSlots.filter(sl => sl.id == id)[0];
+        const copySlot = {...selectedSlot};
+        setSlot(selectedSlot);
+        setOriginalSlot(copySlot);
     }
 
     return(
@@ -77,17 +108,18 @@ export default function EditSlot(){
             <h1>Edit Slot</h1>
             <button onClick={() => navigate("/slots/add")}>Add New Slot</button>
             <p>Choose Location: </p>
-            <GetLocations handleLocationChange={handleLocationChange}/>
+            <GetLocations setLocation={setLocation}/>
             {psychologist == null ? <p>Choose Psychologist: </p> : <p>Psychologist: </p>}
             <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
+            <DateRangeSelector start={startDate} end={endDate} setStart={setStartDate} setEnd={setEndDate}/>
             <p>Choose time slot to edit: </p>
-            <GetTimeSlots psychologist={psychologist} empty={false} setSlot={setSlot}/>
+            <GetTimeSlots allSlots={allSlots} empty={false} handleChange={handleSlotChange} slot={slot}/>
             {slot && <p>Choose Date: </p>}
             {slot && <ChooseDate setDate={setDate} date={slot.date}/>}
             {slot && <p>Input slot start: </p>}
-            {slot && <input type="time" onChange={(e) => setSlotStart(e.target.value)}>{slot.slotStart}</input>}
+            {slot && <input type="time" onChange={(e) => setSlotStart(e.target.value)} defaultValue={slot.slotStart}/>}
             {slot && <p>Input slot end: </p>}
-            {slot && <input type="time" onChange={(e) => setSlotEnd(e.target.value)}>{slot.slotEnd}</input>}
+            {slot && <input type="time" onChange={(e) => setSlotEnd(e.target.value)} defaultValue={slot.slotEnd}/>}
             {slot && <p>Choose session length: </p>}
             {slot && <select onChange={(e) => setSessionLength(e.target.value)} defaultValue={slot.sessionLength}>
             <option value={50}>50 minutes</option>
@@ -96,7 +128,7 @@ export default function EditSlot(){
             <option value={120}>120 minutes</option>
             <option value="custom">Custom</option>
             </select>}
-            {sessionLength == "custom" && <input type="number" onChange={(e) => setSessionLength(e.target.value)} defaultValue="Input custom session length"></input>}
+            {sessionLength == "custom" && <input type="number" onChange={(e) => setSessionLength(e.target.value)} defaultValue="Input custom session length"/>}
             {slot && <p>Choose resting time between sessions: </p>}
             {slot && <select onChange={(e) => setRest(e.target.value)} defaultValue={slot.rest}>
             <option value={10}>10 minutes</option>
@@ -108,7 +140,8 @@ export default function EditSlot(){
             {rest == "custom" && <input type="number" onChange={(e) => setRest(e.target.value)} defaultValue="Input custom rest length"></input>}
             <br/>
             {slot && <p>Weekly repetition?</p>}
-            {slot && <input type="checkbox" onChange={(e) => setWeekly(e.target.value)}></input>}
+            {slot && <input type="checkbox" onChange={(e) => setWeekly(e.target.value)}/>}
+            {slot && <button onClick={cancel}>Cancel</button>}
             {slot && <button onClick={deleteSlot}>Delete Slot</button>}
             {slot && <button onClick={submit}>Save Slot</button>}
         </div>

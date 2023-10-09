@@ -122,6 +122,7 @@ export default function EditLocations(){
         .then(info => window.alert(info))
     }
 
+    /*
     function getLocationData(id){
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${id}`, {
             method: 'GET',
@@ -134,6 +135,7 @@ export default function EditLocations(){
         .then(info => {
             setLocation(info)})
     }
+*/
 
     function validateInput(){
         if(locName == ""){
@@ -245,7 +247,7 @@ export default function EditLocations(){
 
     return(
         <div>
-            <GetLocations handleLocationChange={getLocationData} />
+            <GetLocations setLocation={setLocation} />
             {location && 
             <form onSubmit={(e) => submit(e)}>
                 <label htmlFor="name">Name:</label>
