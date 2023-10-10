@@ -66,12 +66,14 @@ export default function EditSlot(){
     }, [psychologist, startDate, endDate])
 
     function submit(){
+        
+
         //validate input
         if(!validateSlotInput(psychologist, location, date, sessionLength, slotStart, slotEnd, startDate, endDate)) return;
         const newSlot = {
             id: slot.id,
-            psychologist: psychologist,
-            location: location,
+            psychologistId: psychologist.id,
+            locationId: location.id,
             date: date,
             sessionLength: sessionLength,
             rest: rest,
@@ -79,6 +81,19 @@ export default function EditSlot(){
             slotEnd: slotEnd,
             weekly: weekly
         }
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot/${slot.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(newSlot)
+        })
+        .then(response => response.text())
+        .then(info => {
+            window.alert(info);
+        });
+
 
     }
 
@@ -86,6 +101,17 @@ export default function EditSlot(){
         if(!window.confirm("Are you sure you want to delete this slot?")){
             return;
         }
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot/${slot.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(response => response.text())
+        .then(info => {
+            window.alert(info);
+        });
         //DELETE request to backend with current slot's id at end of url
         //confirm message should be shown
 
