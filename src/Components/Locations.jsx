@@ -3,6 +3,8 @@ import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import CalendarV02 from "./CalendarV02";
 import { DateContext } from "../DateContext";
+import { GetLocations } from "./AddAppointment";
+import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function Locations(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -19,49 +21,38 @@ export default function Locations(){
     }, [user]);
 
     useEffect(() => {
-        if(location){
-            let allEvents = [];
-            //fetch all events for current week for this location
-            //send user data --> credentials? part of body? --> should be GET, thus credentials would be a good choice
-            setEvents(allEvents);
+        if(location != null && startDate != "" && endDate != ""){
+
+            const url = new URL(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/location`);
+            url.searchParams.append("locationId", location.id.toString());
+            url.searchParams.append("startDate", startDate);
+            url.searchParams.append("endDate", endDate);
+            
+            //console.log(url.toString());
+            
+            fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+            .then(response => response.json())
+            .then(info => {
+                console.log(info);
+                setEvents(info);
+            });
+            
         }
-    }, []);
+    }, [location, startDate, endDate]);
 
-    function handleLocationChange(loc){
-        setLocation(loc);
 
-    }
-
-    function getLocations(){
-        let locations = [];
-        if(user != null && user.type == "Manager"){
-        //only fetch associated locations
-
-        }
-
-        
-        //fetch all locations for clients, psychologists and admins
-        //if user is psychologist: associated locations should be in the beginning of list and clearly marked
-        
-
-        return(
-            <div>
-                <select onChange={(e) => handleLocationChange(e.target.value)} defaultValue="">
-                    <option value="" disabled>Choose Location</option>
-                    {user && user.type == "Psychologist" ? locations.map(l => l.psychologists.includes(user) ? 
-                    <option value={l}>{l.name} *</option> 
-                    : <option value={l}>{l.name}</option>) 
-                    : locations.map(l => <option value={l}>{l.name}</option>)}
-                </select>
-            </div>
-        )
-    }
     //purpose of page is to see all events (with limited data based on user) associated with one location only (to be chosen from list)
 
     return(
         <div>
             <div>
-                {getLocations()}
+            <GetLocations setLocation={setLocation}/>
             </div>
             <div>
             <h1>Location's events</h1>
