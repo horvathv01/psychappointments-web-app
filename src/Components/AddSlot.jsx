@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
-import { GetLocations, GeneratePsychologistDataField, GetTimeSlots, ChooseDate } from "./AddAppointment";
+import { GetLocations, GeneratePsychologistDataField, ChooseDate } from "./AddAppointment";
 import ServerURLAndPort from "../ServerURLAndPort";
 
 export default function AddSlot(){
@@ -50,6 +50,7 @@ export default function AddSlot(){
         }
     }, [psychologist]);
 
+    /*
     function handleLocationChange(id){
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${id}`, {
             method: 'GET',
@@ -62,6 +63,7 @@ export default function AddSlot(){
         .then(info => {
         setLocation(info)})
     }
+    */
 
     function submit(){
         //validate input
@@ -93,11 +95,6 @@ export default function AddSlot(){
         })        
     }
 
-    function handlePsychologistChange(id){
-        const chosenPsychologist = allPsychologists.filter(psy => psy.id == id)[0];
-        setPsychologist(chosenPsychologist);
-    }
-
     function handleDateChange(date){
         const today = new Date();
         const newDate = new Date(date);
@@ -114,9 +111,9 @@ export default function AddSlot(){
         <div>
             <h1>Add Slot</h1>
             <p>Choose Location: </p>
-            <GetLocations handleLocationChange={handleLocationChange}/>
+            <GetLocations setLocation={setLocation}/>
             {psychologist == null ? <p>Choose Psychologist: </p> : <p>Psychologist: </p>}
-            <GeneratePsychologistDataField setPsychologist={handlePsychologistChange} psychologist={psychologist} location={location}/>
+            <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
             <p>Choose Date: </p>
             <ChooseDate setDate={handleDateChange}/>
             <p>Input session start: </p>
