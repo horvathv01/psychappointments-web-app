@@ -49,7 +49,8 @@ export default function CalendarV02({events}) {
 
 Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
 
-  const [eventsList, setEventsList] = useState(events == undefined ? newEvents : events);
+  //const [eventsList, setEventsList] = useState(events == undefined ? newEvents : events);
+  const [eventsList, setEventsList] = useState(events);
   const {
     startDate, 
     setStartDate, 
@@ -109,7 +110,7 @@ Calendar.ControlledComponent.defaultProps.views = ["week", "month"];
     <div className="calendar-container">
       <Calendar
         localizer={localizer}
-        events={eventsList}
+        events={events}
         startAccessor="start"
         endAccessor="end"
         defaultView="week"

@@ -48,7 +48,6 @@ export default function EditSlot(){
             
             //console.log(url.toString());
             
-            
             fetch(url.toString(), {
                 method: 'GET',
                 headers: {
