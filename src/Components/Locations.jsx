@@ -39,6 +39,7 @@ export default function Locations(){
             })
             .then(response => response.json())
             .then(info => {
+                console.log(info);
                 setEvents(info);
             });
             
@@ -57,7 +58,7 @@ export default function Locations(){
     function convertSessionToEvent(session){
         return {
             id: session.id,
-            title: "Session",
+            title: session.psychologistId,
             start: new Date(session.start),
             end: new Date(session.end)
           }

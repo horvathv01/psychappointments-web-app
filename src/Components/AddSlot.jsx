@@ -81,6 +81,7 @@ export default function AddSlot(){
             Weekly: weekly
         }
         console.log(slotDTO);
+        
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot`, {
             method: 'POST',
             headers: {
@@ -93,6 +94,7 @@ export default function AddSlot(){
         .then(info => {
             window.alert(info);
         })        
+        
     }
 
     function handleDateChange(date){
@@ -104,6 +106,13 @@ export default function AddSlot(){
         setDate(newDate);    
         }
     }
+
+    function formatTime(date) {
+        console.log(date);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      }
 
 
 
