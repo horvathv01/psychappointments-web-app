@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import ServerURLAndPort from "../ServerURLAndPort";
+import { EditProfile } from "./ProfilePage";
 
 export default function AddAppointment(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -14,6 +15,7 @@ export default function AddAppointment(){
     const [description, setDescription] = useState(""); //--> registered session description for appointment
     const [frequency, setFrequency] = useState("Weekly"); //--> registered frequency for appointment
     const [slot, setSlot] = useState(null);
+    const [allSlots, setAllSlots] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,17 +28,6 @@ export default function AddAppointment(){
         }
     }, [user, client]);
 
-    function getLocationData(id){
-        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/location/${location.id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(info => setLocation(info))
-    }
 
     function handleSubmit(){
         //validate data --> same as registration validator!
@@ -69,7 +60,7 @@ export default function AddAppointment(){
             <div>
                 <form onSubmit={handleSubmit}>
                     <p>Location: </p>
-                    <GetLocations handleLocationChange={getLocationData} />
+                    <GetLocations setLocation={setLocation} />
                     <p>Psychologist: </p>
                     <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
                     <p>Client: </p>
@@ -201,7 +192,85 @@ export function ChooseDate({setDate, date}){
 
 }
 
-export function GenerateClientDataFields({user, client}) {
+
+export function GenerateClientDataFields({user, client, setClient}){
+
+    function registerProfile(profile){
+        /*        const userDto = {
+          Id: 0,
+          Name: firstName + " " + lastName,
+          Type: userType,
+          Email: email,
+          Phone: phone,
+          DateOfBirth: birthDate,
+          Address: {
+              Country: country,
+              Zip: zip,
+              City: city,
+              Street: street,
+              Rest: addressRest
+          },
+          Password: password,
+          RegisteredBy: registeredBy,
+          SessionIds: [],
+          PsychologistIds: [],
+          ClientIds: null,
+          SlotIds: null,
+          LocationIds: null
+      };*/
+
+        profile.Type = "Client";
+        profile.Password = "1234";
+        console.log(profile);
+
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/registration`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(profile)
+          })
+            .then(response => {
+              if (response.status == 409) {
+                console.log("account has already been registered")
+                //getUserData(profile.email);
+              } else if (response.status == 200){
+                console.log("account successfully registered")
+                //getUserData(profile.email);
+              } else {
+                window.alert("something went wrong");
+              }
+            })
+
+            
+        //registration fetch
+            //409: already exists
+            //200: successful
+            //anything else: other problem
+        //fetch client by email
+            //setClient(result)
+    }
+
+    function getUserData(email){
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/email/${email}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(info => {
+            setClient(info);
+        });
+    }
+
+    return (<EditProfile user={user} saveProfile={registerProfile} loggedIn={user} registeredBy={user} newRegistration={true}/>)
+}
+
+/*
+export function GenerateClientDataFields({user, client, setClient}) {
     function parseAddress(input){
         let address = {
             country: "",
@@ -298,3 +367,4 @@ export function GenerateClientDataFields({user, client}) {
         </div>
     )
 };
+*/
