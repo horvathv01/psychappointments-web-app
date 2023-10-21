@@ -28,6 +28,11 @@ export default function AddAppointment(){
         }
     }, [user, client]);
 
+    useEffect(() => {
+        console.log(client);
+
+    }, [client])
+
 
     function handleSubmit(){
         //validate data --> same as registration validator!
@@ -64,7 +69,7 @@ export default function AddAppointment(){
                     <p>Psychologist: </p>
                     <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
                     <p>Client: </p>
-                    {user && <GenerateClientDataFields user={user} client={client}/>}
+                    {user && <GenerateClientDataFields user={user} client={client} setClient={setClient}/>}
                     <p>Select date:</p>
                     <ChooseDate setDate={setDate}/>
                     <p>Select time slot for session: </p>
@@ -194,34 +199,38 @@ export function ChooseDate({setDate, date}){
 
 
 export function GenerateClientDataFields({user, client, setClient}){
+    const [edit, setEdit] = useState(false);
 
     function registerProfile(profile){
-        /*        const userDto = {
+
+        /*
+               const profile = {
           Id: 0,
-          Name: firstName + " " + lastName,
-          Type: userType,
-          Email: email,
-          Phone: phone,
-          DateOfBirth: birthDate,
+          Name: "Proba" + " " + "Client",
+          Type: "Client",
+          Email: "proba@client.hu",
+          Phone: "+123456789",
+          DateOfBirth: "2011-11-11",
           Address: {
-              Country: country,
-              Zip: zip,
-              City: city,
-              Street: street,
-              Rest: addressRest
+              Country: "Hungary",
+              Zip: "1234",
+              City: "Budapest",
+              Street: "Kossuth Lajos utca",
+              Rest: "19/c"
           },
-          Password: password,
-          RegisteredBy: registeredBy,
+          Password: "1234",
+          RegisteredBy: user.Id,
           SessionIds: [],
           PsychologistIds: [],
           ClientIds: null,
           SlotIds: null,
           LocationIds: null
-      };*/
-
-        profile.Type = "Client";
-        profile.Password = "1234";
-        console.log(profile);
+      };
+      */
+        
+      profile.Type = "Client";
+      profile.Password = "1234";
+      //console.log(profile);
 
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/access/registration`, {
             method: 'POST',
@@ -234,10 +243,10 @@ export function GenerateClientDataFields({user, client, setClient}){
             .then(response => {
               if (response.status == 409) {
                 console.log("account has already been registered")
-                //getUserData(profile.email);
+                getUserData(profile.Email);
               } else if (response.status == 200){
                 console.log("account successfully registered")
-                //getUserData(profile.email);
+                getUserData(profile.Email);
               } else {
                 window.alert("something went wrong");
               }
@@ -266,7 +275,21 @@ export function GenerateClientDataFields({user, client, setClient}){
         });
     }
 
-    return (<EditProfile user={user} saveProfile={registerProfile} loggedIn={user} registeredBy={user} newRegistration={true}/>)
+
+return (
+    <div>
+        {(client && !edit) && <div>
+            <p>Name: {client.name}</p>
+            <p>Email: {client.email}</p>
+            <p>Phone: {client.phone}</p>
+            <button onClick={() => setEdit(!edit)}>Change</button>
+            </div>}
+    {(!client || edit) && <div>
+        <EditProfile user={user} saveProfile={registerProfile} loggedIn={user} registeredBy={user} newRegistration={true}/>
+        <button onClick={() => setEdit(false)}>Cancel</button>
+        </div>}
+    </div>
+    )
 }
 
 /*
