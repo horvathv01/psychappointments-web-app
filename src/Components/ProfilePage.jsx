@@ -335,11 +335,52 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         </Form.Group>
       </Row>
 
-      <Button variant="primary" type="submit">
+      <Button onClick={(e) => e.preventDefault()} variant="primary" type="submit">
         Save
       </Button>
     </Form>
   </div>
 
 </div>);
+}
+
+export function validateUserData(firstName, lastName, birthDate, email, password, passwordConfirm, phone, country, zip, city, street, addressRest){
+  if(!validateUserName(firstName, lastName)){
+      window.alert("Username is required!");
+      //setFirstName("");
+      //setLastName("");
+      return false;
+  }
+  if(!validateBirthDate(birthDate)){
+      window.alert("Birth date cannot be empty!");
+      //setBirthDate("");
+      return false;
+  }
+  if(!validateEmail(email)){
+      window.alert("Invalid e-mail address!");
+      //setEmail("");
+      return false;
+  }
+  if(!checkPasswordMatch(password, passwordConfirm)){
+      window.alert("Passwords do not match!");
+      //setPassword("");
+      //setPasswordConfirm("");
+      return false;
+  }
+  if(!validatePassword(password, passwordConfirm)){
+      window.alert("A password has to be at least 6 characters long, and has to contain at least one of these: uppercase letters, lowercase letters, numbers, symbols (!@#$%^&*)!");
+      //setPassword("");
+      //setPasswordConfirm("");
+      return false;
+  }
+  if(!validatePhone(phone)){
+      window.alert("Invalid phone number!");
+      //setPhone("");
+      return false;
+  }
+  if(!validateAddress(country, zip, city, street, addressRest)){
+      window.alert("Address is invalid!");
+      return false;
+  }
+  return true;
 }

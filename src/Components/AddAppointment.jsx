@@ -2,7 +2,8 @@ import React, {useState, useEffect, useContext} from "react";
 import { UserContext } from "../UserContext";
 import { useNavigate } from "react-router-dom";
 import ServerURLAndPort from "../ServerURLAndPort";
-import { EditProfile } from "./ProfilePage";
+import { Form, Row, Col, Button } from "react-bootstrap";
+import { validateUserData } from "./ProfilePage";
 
 export default function AddAppointment(){
     const {user, retreiveUser} = useContext(UserContext);
@@ -285,10 +286,186 @@ return (
             <button onClick={() => setEdit(!edit)}>Change</button>
             </div>}
     {(!client || edit) && <div>
-        <EditProfile user={user} saveProfile={registerProfile} loggedIn={user} registeredBy={user} newRegistration={true}/>
-        <button onClick={() => setEdit(false)}>Cancel</button>
+        <RegisterNewClient addClient={registerProfile} registeredBy={user}/>
+        {edit && <button onClick={() => setEdit(false)}>Cancel</button>}
         </div>}
     </div>
+    )
+}
+
+function RegisterNewClient({addClient, registeredBy}){
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthDate, setBirthDate] = useState("");
+
+    const [country, setCountry] = useState("");
+    const [zip, setZip] = useState("");
+    const [city, setCity] = useState("");
+    const [street, setStreet] = useState("");
+    const [addressRest, setAddressRest] = useState("");
+
+
+    const handleSubmitNewClient = () => {
+        const password = "1234";
+        const passwordConfirm = "1234";
+        if(!validateUserData(firstName, lastName, birthDate, email, password, passwordConfirm, phone, country, zip, city, street, addressRest)){
+            return;
+        }
+
+        const userDto = {
+          Id: 0,
+          Name: firstName + " " + lastName,
+          Type: "Client",
+          Email: email,
+          Phone: phone,
+          DateOfBirth: birthDate,
+          Address: {
+              Country: country,
+              Zip: zip,
+              City: city,
+              Street: street,
+              Rest: addressRest
+          },
+          Password: password,
+          RegisteredBy: registeredBy.id,
+          SessionIds: [],
+          PsychologistIds: [],
+          ClientIds: null,
+          SlotIds: null,
+          LocationIds: null
+      };
+      addClient(userDto);
+    }
+
+    return(
+        <Form>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGridFirstName">
+              <Form.Label>First Name: </Form.Label>
+              <Form.Control
+                type="text"
+                name="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Enter user name!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridLastName">
+              <Form.Label>Last Name: </Form.Label>
+              <Form.Control
+                type="text"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Enter user name!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridPhone">
+              <Form.Label>Phone number: </Form.Label>
+              <Form.Control
+                type="text"
+                name="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridEmail">
+              <Form.Label>Email: </Form.Label>
+              <Form.Control
+                type="text"
+                name="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email address!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridBirthDate">
+              <Form.Label>Date of Birth: </Form.Label>
+              <Form.Control
+                type="date"
+                name="BirthDate"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                placeholder="Enter email address!"
+              />
+            </Form.Group>
+          </Row>
+          <p>Address</p>
+    
+          <Row>
+          <Form.Group as={Col} controlId="formGridCountry">
+              <Form.Label>Country: </Form.Label>
+              <Form.Control
+                type="text"
+                name="Country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Enter your country!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridZip">
+              <Form.Label>ZIP or Postal Code: </Form.Label>
+              <Form.Control
+                type="text"
+                name="Zip"
+                value={zip}
+                onChange={(e) => setZip(e.target.value)}
+                placeholder="Enter your ZIP or Postal Code!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridCity">
+              <Form.Label>City: </Form.Label>
+              <Form.Control
+                type="text"
+                name="City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter your city!"
+              />
+            </Form.Group>
+    
+            <Form.Group as={Col} controlId="formGridStreet">
+              <Form.Label>Street: </Form.Label>
+              <Form.Control
+                type="text"
+                name="Street"
+                value={street}
+                onChange={(e) => setStreet(e.target.value)}
+                placeholder="Enter your Street!"
+              />
+            </Form.Group>
+    
+    
+            <Form.Group as={Col} controlId="formGridAddressRest">
+              <Form.Label>Rest of Address: </Form.Label>
+              <Form.Control
+                type="text"
+                name="AddressRest"
+                value={addressRest}
+                onChange={(e) => setAddressRest(e.target.value)}
+                placeholder="Enter the rest of your address!"
+              />
+            </Form.Group>
+          </Row>
+          
+    
+          <Button variant="primary" type="submit" onClick={(e) => {
+            e.preventDefault();
+            handleSubmitNewClient();
+    }
+        }>
+            Add Client
+          </Button>
+        </Form>
     )
 }
 
