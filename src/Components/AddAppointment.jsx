@@ -30,9 +30,44 @@ export default function AddAppointment(){
     }, [user, client]);
 
     useEffect(() => {
-        console.log(client);
+        //console.log(client);
+        if(location && psychologist && client && date){
 
-    }, [client])
+            const originalDate = new Date(date);
+            originalDate.setDate(originalDate.getDate() + 1);
+            const endDate = originalDate.toISOString().split('T')[0];
+
+            const url = new URL(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/slot/psychologist/location`);
+            url.searchParams.append("psychologistId", psychologist.id.toString());
+            url.searchParams.append("locationId", location.id.toString());
+            url.searchParams.append("startDate", date);
+            url.searchParams.append("endDate", endDate);
+            
+            console.log(url.toString());
+            
+            fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            })
+            .then(response => response.json())
+            .then(info => {
+                console.log(info);
+                setAllSlots(info);
+            });
+        }
+
+    }, [location, psychologist, client, date])
+
+    function handleSlotChange(slotId){
+        const selectedSlot = allSlots.filter(sl => sl.id == slotId)[0];
+        console.log(selectedSlot);
+        setSlot(selectedSlot);
+    }
+
+    
 
 
     function handleSubmit(){
@@ -74,7 +109,7 @@ export default function AddAppointment(){
                     <p>Select date:</p>
                     <ChooseDate setDate={setDate}/>
                     <p>Select time slot for session: </p>
-                    <GetTimeSlots allSlots={allSlots} empty={true} setSlot={setSlot}/>
+                    <GetTimeSlots allSlots={allSlots} empty={true} setSlot={setSlot} handleChange={handleSlotChange}/>
                     <p>Recurring session?</p>
                     <select onChange={(e) => setFrequency(e.target.value)} defaultValue="Weekly">
                         <option value="Weekly">Weekly</option>
