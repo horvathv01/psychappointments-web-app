@@ -16,6 +16,7 @@ export default function AddAppointment(){
     const [description, setDescription] = useState(""); //--> registered session description for appointment
     const [frequency, setFrequency] = useState("Weekly"); //--> registered frequency for appointment
     const [slot, setSlot] = useState(null);
+    const [price, setPrice] = useState(12000);
     const [allSlots, setAllSlots] = useState([]);
     const navigate = useNavigate();
 
@@ -67,33 +68,70 @@ export default function AddAppointment(){
         setSlot(selectedSlot);
     }
 
-    
-
-
-    function handleSubmit(){
-        //validate data --> same as registration validator!
-        //what to include? 
-        //psychologist.id + psychologist.name? --> to track changes of id in future
-        //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
-        //location id (+ location name?)
-        //slot
-        //session start, session end (date from date state)
-        //frequency of session
-        //session description
-        //time of appointment addition + data of person who added it
-        //fetch POST to add appointment
-
-        //if session collides with future scheduled sessions but is fine this time, respond with warning
-        //if session is scheduled for unfit time (collides with another one): respond with nope (hacker protection)
+    function validate(){
+        if(!location){
+            return false;
+        }
+        if(!psychologist){
+            return false;
+        }
+        if(!client){
+            return false;
+        }
+        if(!date){
+            return false;
+        }
+        if(!sessionStart){
+            return false;
+        }
+        if(!sessionEnd){
+            return false;
+        }
+        if(!description){
+            return false;
+        }
+        if(price > 0)
+        return true;
     }
 
-    
 
-    //choose location first --> fetch psychologists available at location
-    //see user: if user is psychologist --> psychologist field should be filled with own data
-        //else if user is client --> client fields should be filled with own data, psychologist field should be a dropdown menu (with fetch from backend)
-        //else if user is admin/manager --> psychologist field should be a dropdown menu (with fetch from backend), if existing client? --> dropdown menu
-            //else: client fields should be filled by hand
+    function handleSubmit(e){
+        e.preventDefault();
+        if(!validate()){
+            console.log("validation failed")
+            return;
+        }
+
+        const sessionDTO = {
+            Id: 0,
+            PsychologistId: psychologist.id,
+            Blank: false,
+            LocationId: location.id,
+            Date: date,
+            Start: sessionStart,
+            End: sessionEnd,
+            ClientId: client.id,
+            Price: price,
+            Frequency: frequency,
+            SlotId: null,
+            Description: description
+        };
+
+        //console.log(sessionDTO);
+        
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(sessionDTO)
+        })
+        .then(response => response.text())
+        .then(info => window.alert(info));
+
+
+    }
         
 
     return(
@@ -108,8 +146,12 @@ export default function AddAppointment(){
                     {user && <GenerateClientDataFields user={user} client={client} setClient={setClient}/>}
                     <p>Select date:</p>
                     <ChooseDate setDate={setDate}/>
-                    <p>Select time slot for session: </p>
-                    <GetTimeSlots allSlots={allSlots} empty={true} setSlot={setSlot} handleChange={handleSlotChange}/>
+                    {/*<p>Select time slot for session: </p>*/}
+                    {/*<GetTimeSlots allSlots={allSlots} handleChange={handleSlotChange}/>*/}
+                    <p>Input session start: </p>
+                    <input type="time" onChange={(e) => setSessionStart(e.target.value)}></input>
+                    <p>Input session end: </p>
+                    <input type="time" onChange={(e) => setSessionEnd(e.target.value)}></input>
                     <p>Recurring session?</p>
                     <select onChange={(e) => setFrequency(e.target.value)} defaultValue="Weekly">
                         <option value="Weekly">Weekly</option>
@@ -117,9 +159,11 @@ export default function AddAppointment(){
                         <option value="Monthly">Monthly</option>
                         <option value="None">None (only one session)</option>
                     </select>
+                    <p>Input price:</p>
+                    <input type="number" onChange={(e) => setPrice(e.target.value)} defaultValue={price}></input>
                     <p>Please describe the problem briefly!</p>
                     <input type="textarea" onChange={(e) => setDescription(e.target.value)} required></input>
-                    <input type="submit" value="Submit"></input>
+                    <button onClick={handleSubmit}>Add Session</button>
                 </form>
             </div>
         </div>
@@ -214,13 +258,11 @@ export function GenerateListOfPsychologists({allPsychologists, setPsychologist})
     );
 };
 
-export function GetTimeSlots({allSlots, empty, handleChange, slot}){
+export function GetTimeSlots({allSlots, handleChange}){
         return(<div>
             <select onChange={(e) => handleChange(e.target.value)} value="">
                 <option value="" disabled>Choose Slot</option>
-                {empty && allSlots.filter(sl => sl.sessionIds.length == 0).map(sl => 
-                <option key={"slot"+sl.id} value={sl.id}>{sl.slotStart} - {sl.slotEnd}</option>)}
-                {!empty && allSlots.map(sl => <option key={"slot"+sl.id} value={sl.id}>{sl.slotStart} - {sl.slotEnd}</option>)}
+                {allSlots.length > 0 && allSlots.map(sl => <option key={"slot"+sl.id} value={sl.id}>{sl.slotStart} - {sl.slotEnd}</option>)}
             </select>
         </div>
     );

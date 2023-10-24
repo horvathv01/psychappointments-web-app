@@ -125,9 +125,9 @@ export default function AddSlot(){
             <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
             <p>Choose Date: </p>
             <ChooseDate setDate={handleDateChange}/>
-            <p>Input session start: </p>
+            <p>Input slot start: </p>
             <input type="time" onChange={(e) => setSlotStart(e.target.value)}></input>
-            <p>Input session end: </p>
+            <p>Input slot end: </p>
             <input type="time" onChange={(e) => setSlotEnd(e.target.value)}></input>
             <p>Choose session length: </p>
             <select onChange={(e) => setSessionLength(e.target.value)} defaultValue={50}>

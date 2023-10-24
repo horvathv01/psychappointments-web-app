@@ -138,7 +138,7 @@ export default function EditSlot(){
             <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
             <DateRangeSelector start={startDate} end={endDate} setStart={setStartDate} setEnd={setEndDate}/>
             <p>Choose time slot to edit: </p>
-            <GetTimeSlots allSlots={allSlots} empty={false} handleChange={handleSlotChange} slot={slot}/>
+            <GetTimeSlots allSlots={allSlots} handleChange={handleSlotChange}/>
             {slot && <p>Choose Date: </p>}
             {slot && <ChooseDate setDate={setDate} date={slot.date}/>}
             {slot && <p>Input slot start: </p>}
