@@ -56,13 +56,33 @@ export default function Locations(){
     }, [events])
 
     function convertSessionToEvent(session){
+
+        function getEventTitle(){
+            if(user.type == "Admin"){
+                if(session.blank){
+                    return `${session.psychologistName}, blank`;
+                } else {
+                return `${session.psychologistName}, client: ${session.clientName}`;
+                }
+            }
+            if(user.type == "Psychologist" && session.psychologistId == user.id){
+                //my session --> show client's name
+                return session.clientName;
+            } else {
+                //all other cases: show psychologist's name
+                return session.psychologistName;
+            }
+        }
+
+
         return {
             id: session.id,
-            title: session.psychologistId,
+            title: getEventTitle(),
             start: new Date(session.start),
             end: new Date(session.end)
           }
     }
+
 
 
     //purpose of page is to see all events (with limited data based on user) associated with one location only (to be chosen from list)

@@ -5,7 +5,6 @@ import 'moment/locale/hu';
 import 'react-big-calendar/lib/css/react-big-calendar.css'; // Import the default calendar styles
 import './CalendarV02.css'; // Import your custom CSS file
 import { DateContext } from "../DateContext";
-import events from "../Resources/events";
 
 //moment.tz.setDefault("Europe");
 moment.locale("hu");
