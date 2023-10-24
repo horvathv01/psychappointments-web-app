@@ -74,6 +74,10 @@ export default function EditAppointment(){
 
     }
 
+    function handleSlotChange(slotId){
+
+    }
+
     return(
         <div>
             <div>
@@ -92,7 +96,7 @@ export default function EditAppointment(){
                     {appointment && <ShowAndChangeData data={date} setData={setDate} alternative={<ChooseDate setDate={setDate}/>}/>}
                     {appointment && <p>Select time slot for session: </p>}
                     {appointment && <ShowAndChangeData data={slot} setData={setSlot} 
-                    alternative={<GetTimeSlots psychologist={psychologist} empty={true} setSlot={setSlot}/>}/>}
+                    alternative={<GetTimeSlots psychologist={psychologist} handleChange={handleSlotChange}/>}/>}
                     {appointment && <p>Recurring session?</p>}
                     {appointment && <ShowAndChangeData data={frequency} setData={setFrequency} alternative={<select onChange={(e) => setFrequency(e.target.value)} defaultValue="weekly">
                         <option value="Weekly">Weekly</option>
