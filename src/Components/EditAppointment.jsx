@@ -123,4 +123,37 @@ export function ShowAndChangeData({data, setData, alternative}){
         </div>
     )
 }
-//appointment.location
+
+export function ClickCalendarEvent(calendarEvent){
+    let choice;
+    
+    if(calendarEvent.client == null){
+        choice = window.confirm(
+        `
+            Psychologist: ${calendarEvent.psychologist} \n
+            Partner Psychologist: ${calendarEvent.partnerPsychologist} \n
+            Price: ${calendarEvent.price} \n
+            Start: ${calendarEvent.start} \n
+            End: ${calendarEvent.end}
+            Would you like to book this session?
+        `
+        );
+    } else {
+        choice = window.confirm(
+        `
+            Psychologist: ${calendarEvent.psychologist} \n
+            Partner Psychologist: ${calendarEvent.partnerPsychologist} \n
+            ${calendarEvent.client != "" && `Client: ${calendarEvent.client} \n`}
+            Price: ${calendarEvent.price} \n
+            Start: ${calendarEvent.start} \n
+            End: ${calendarEvent.end}
+            Would you like to edit this session?
+        `
+        );
+    }
+
+    if(choice){
+        console.log("sí");
+    }
+
+}
