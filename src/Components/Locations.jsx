@@ -79,7 +79,11 @@ export default function Locations(){
             id: session.id,
             title: getEventTitle(),
             start: new Date(session.start),
-            end: new Date(session.end)
+            end: new Date(session.end),
+            psychologist: session.psychologistName,
+            partnerPsychologist: session.partnerPsychologistName,
+            client: session.clientName,
+            price: session.price
           }
     }
 
