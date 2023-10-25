@@ -12,6 +12,7 @@ export default function Locations(){
     const [location, setLocation] = useState(null);
     const [events, setEvents] = useState([]);
     const [calendarEvents, setCalendarEvents] = useState([]);
+    const [displayBlank, setDisplayBlank] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,10 +51,14 @@ export default function Locations(){
         //convert sessions to calendar events:
         if(events.length > 0){
             let newCalEvents = [];
-            events.map(ses => newCalEvents.push(convertSessionToEvent(ses)));
+            if(displayBlank){
+                events.map(ses => newCalEvents.push(convertSessionToEvent(ses)));
+            } else {
+                events.filter(ses => !ses.blank).map(ses => newCalEvents.push(convertSessionToEvent(ses)));
+            }
             setCalendarEvents(newCalEvents);
         }
-    }, [events])
+    }, [events, displayBlank])
 
     function convertSessionToEvent(session){
 
@@ -99,6 +104,16 @@ export default function Locations(){
             <div>
             <h1>Location's events</h1>
             {user != null && user.type == "Psychologist" ? <button onClick={() => navigate("/addappointment")}>Add Appointment</button> : null}
+            <label>
+            <input
+            type="checkbox"
+            value={displayBlank}
+            checked={displayBlank}
+            onChange={(e) => setDisplayBlank(e.target.checked)}
+            />
+            Display Blank Sessions
+            </label>
+
             <CalendarV02 events={calendarEvents}/>
             </div>
         </div>
