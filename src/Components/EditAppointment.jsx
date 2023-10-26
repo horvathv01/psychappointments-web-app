@@ -17,9 +17,9 @@ export default function EditAppointment(){
     const [sessionEnd, setSessionEnd] = useState(null); //--> registered session end for appointment
     const [description, setDescription] = useState(""); //--> registered session description for appointment
     const [frequency, setFrequency] = useState("Weekly"); //--> registered frequency for appointment
-    const [slot, setSlot] = useState(null);
     const [price, setPrice] = useState(12000);
     const [appointment, setAppointment] = useState(null);
+    const [submitButtonText, setSubmitButtonText] = useState("Save");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,7 +38,6 @@ export default function EditAppointment(){
         })
         .then(response => response.json())
         .then(info => {
-            console.log(info);
             if(retreivedUser.type == "Client" && info.clientId != retreivedUser.id){
                 window.alert("You are unauthorized to view this page.");
                 navigate("/");
@@ -48,7 +47,7 @@ export default function EditAppointment(){
     }, [user]);
 
     useEffect(() => {
-        if(appointment){
+        if(appointment && user){
             setDate(appointment.date)
             setSessionStart(appointment.start)
             setSessionEnd(appointment.end)
@@ -88,7 +87,6 @@ export default function EditAppointment(){
             })
             .then(response => response.json())
             .then(info => {
-                console.log(info)
                 setLocation(info)
             }
             );
@@ -104,60 +102,124 @@ export default function EditAppointment(){
                 .then(response => response.json())
                 .then(info => setClient(info));
             }
+            //ha a user kliens és az időpont foglalható: "Book Appointment"
+            //ha a user.id == appointment.clientId: "Cancel Booking"
+            if(user.type == "Client" && appointment.blank){
+                setSubmitButtonText("Book Appointment");
+            }
 
+            //{user && user.type == "Client" && appointment && !appointment.blank && <button>Book Appointment</button>}
+            
 
         }
     }, [appointment])
 
-    function handleSubmit(){
-        //validate data --> same as registration validator!
-        //what to include? 
-        //psychologist.id + psychologist.name? --> to track changes of id in future
-        //client's data --> send to backend, see if email already exists --> add appointment to existing client ELSE create new client with standard password
-        //location id (+ location name?)
-        //slot
-        //session start, session end (date from date state)
-        //frequency of session
-        //session description
-        //time of appointment addition + data of person who added it
-        //fetch POST to add appointment
+    function sendRequestToServer(sessionDTO){
+        //console.log(sessionDTO);
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/${appointment.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(sessionDTO)
+        })
+        .then(response => response.text())
+        .then(info => window.alert(info));
+    }
 
-        //if session collides with future scheduled sessions but is fine this time, respond with warning
-        //if session is scheduled for unfit time (collides with another one): respond with nope (hacker protection)
+    function handleSubmit(){
+        const sessionDTO = {
+            PsychologistId: psychologist.id,
+            PartnerPsychologistId: partnerPsychologist == null ? null : partnerPsychologist.id,
+            Blank: client == null ? true : false,
+            LocationId: location.id,
+            Date: date,
+            Start: sessionStart,
+            End: sessionEnd,
+            ClientId: client == null ? null : client.id,
+            Price: price,
+            Frequency: frequency,
+            SlotId: appointment.slotId,
+            Description: description
+        };
+
+        sendRequestToServer(sessionDTO);
     };
 
     function deleteAppointment(){
-        //is user authorized to do that?
-        if(!window.confirm("Are you sure you want to delete this slot?")){
+        if(!user || user.type == "Client"){
+            window.alert("You are not authorized to delete a session.")
             return;
         }
-        //DELETE request to backend with current slot in body
-        //confirm message should be shown
+        if(!window.confirm("Are you sure you want to delete this session?")){
+            return;
+        }
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/${appointment.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        })
+        .then(response => response.text())
+        .then(info => {
+            window.alert(info)
+            navigate("/");
+        });
 
     }
 
-    function handleSlotChange(slotId){
-
+    function cancelBooking(){
+        if(!window.confirm("Are you sure you want to cancel this booking?")){
+            return;
+        }
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/${appointment.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(info => {
+            info.clientId = null;
+            info.clientName = "";
+            sendRequestToServer(info)
+    });
     }
+
 
     return(
     <div>
             {user && (user.type == "Admin" || user.type == "Psychologist") && <button onClick={() => navigate("/appointments/add")}>Add New Appointment</button>}        
             <p>Psychologist:</p>
             {psychologist && <DisplayPersonDetails person={psychologist}/>}
-            {partnerPsychologist && <div>
+            {partnerPsychologist ? <div>
                 <p>Partner Psychologist:</p>
                 <DisplayPersonDetails person={partnerPsychologist}/>
+                <button onClick={() => setPartnerPsychologist(null)}>Remove</button>
+                </div> : user && appointment && (user.type == "Admin" || (user.type == "Psychologist" && appointment.psychologistId == user.id)) &&
+                <div>
+                    <p>Add Partner (optional):</p>
+                    <GeneratePsychologistDataField setPsychologist={setPartnerPsychologist} psychologist={partnerPsychologist} location={location} dontDisplay={psychologist}/>
                 </div>}
             {location && <DisplayLocationDetails location={location}/>}
-            {client && <DisplayPersonDetails person={client}/>}
+            {client && <p>Client Details:</p>}
+            {user &&
+            (user.type == "Admin" || user.type == "Psychologist") ? 
+            <GenerateClientDataFields user={user} client={client} setClient={setClient}/> :
+            client && <DisplayPersonDetails person={client}/>}
             {appointment && <p>Date: {appointment.date}</p>}
             {appointment && <p>Start: {appointment.start}</p>}
             {appointment && <p>End: {appointment.end}</p>}
-            {appointment && <p>Price: {appointment.price} HUF</p>}
-            {user && user.type == "Client" && appointment && !appointment.blank && <button>Book Appointment</button>}
-            {user && user.type == "Client" && appointment && appointment.clientId == user.id && <button>Cancel booking</button>}
-            {user && (user.type == "Admin" || (user.type == "Psychologist" && appointment && appointment.psychologistId == user.id)) && <button>Delete Appointment</button>}
+            {appointment && user && (user.type == "Admin" || (user.type == "Psychologist" && appointment.psychologistId == user.id)) ?
+            <input type="number" onChange={(e) => setPrice(e.target.value)} defaultValue={price}></input> :
+            appointment && <p>Price: {appointment.price} HUF</p>}
+            <button onClick={() => handleSubmit(false)}>{submitButtonText}</button>
+            {user && appointment && !appointment.blank && user.type != "Manager" && <button onClick={cancelBooking}>Cancel Booking</button>}
+            {user && (user.type == "Admin" || (user.type == "Psychologist" && appointment && appointment.psychologistId == user.id)) && 
+            <button onClick={deleteAppointment}>Delete Appointment</button>}
     </div>
     );
 

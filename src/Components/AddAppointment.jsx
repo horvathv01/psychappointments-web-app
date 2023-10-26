@@ -205,7 +205,7 @@ export function GetLocations({setLocation}){
     )
 }
 
-export function GeneratePsychologistDataField({psychologist, setPsychologist, location}){
+export function GeneratePsychologistDataField({psychologist, setPsychologist, location, dontDisplay}){
     const {user, retreiveUser} = useContext(UserContext);
     const [allPsychologists, setAllPsychologists] = useState([]);
 
@@ -236,14 +236,14 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
 
     return(
         <div>
-            {!psychologist ? <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} /> :
+            {!psychologist ? <GenerateListOfPsychologists allPsychologists={allPsychologists} setPsychologist={setPsychologist} dontDisplay={dontDisplay}/> :
             <div><p>{psychologist.name}</p><button onClick={() => setPsychologist(null)}>Change</button></div>
         }
         </div>
     );
 };
 
-export function GenerateListOfPsychologists({allPsychologists, setPsychologist}){
+export function GenerateListOfPsychologists({allPsychologists, setPsychologist, dontDisplay}){
 
     function handlePsychologistChange(id){
         const selectedPsychologist = allPsychologists.filter(psy => psy.id == id)[0];
@@ -253,7 +253,9 @@ export function GenerateListOfPsychologists({allPsychologists, setPsychologist})
     return(
         <select onChange={(e) => handlePsychologistChange(e.target.value)} defaultValue="">
                 <option value="" disabled>Choose Psychologist</option>
-                {allPsychologists.length > 0 && allPsychologists.map(p => <option key={"psychologist" + p.id} value={p.id}>{p.name}</option>)}
+                {allPsychologists.length > 0 && dontDisplay ? 
+                allPsychologists.filter(p => p.id != dontDisplay.id).map(p => <option key={"psychologist" + p.id} value={p.id}>{p.name}</option>) : 
+                allPsychologists.map(p => <option key={"psychologist" + p.id} value={p.id}>{p.name}</option>)}
         </select>
     );
 };
