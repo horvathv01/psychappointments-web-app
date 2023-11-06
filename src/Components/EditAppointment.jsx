@@ -26,7 +26,11 @@ export default function EditAppointment(){
         const retreivedUser = retreiveUser();
         if(retreivedUser == null){
             navigate("/loginfirst");
+        } else if (retreivedUser.type == "Client"){
+            setClient(retreivedUser);
         }
+
+
         const sessionID = sessionStorage.getItem('sessionId');
         
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/${sessionID}`, {
@@ -38,7 +42,7 @@ export default function EditAppointment(){
         })
         .then(response => response.json())
         .then(info => {
-            if(retreivedUser.type == "Client" && info.clientId != retreivedUser.id){
+            if(retreivedUser.type == "Client" && info.clientId != null && info.clientId != retreivedUser.id){
                 window.alert("You are unauthorized to view this page.");
                 navigate("/");
             }
@@ -115,7 +119,6 @@ export default function EditAppointment(){
     }, [appointment])
 
     function sendRequestToServer(sessionDTO){
-        //console.log(sessionDTO);
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/${appointment.id}`, {
             method: 'PUT',
             headers: {
@@ -126,6 +129,7 @@ export default function EditAppointment(){
         })
         .then(response => response.text())
         .then(info => window.alert(info));
+
     }
 
     function handleSubmit(){
@@ -202,7 +206,7 @@ export default function EditAppointment(){
                 </div> : user && appointment && (user.type == "Admin" || (user.type == "Psychologist" && appointment.psychologistId == user.id)) &&
                 <div>
                     <p>Add Partner (optional):</p>
-                    <GeneratePsychologistDataField setPsychologist={setPartnerPsychologist} psychologist={partnerPsychologist} location={location} dontDisplay={psychologist}/>
+                    <GeneratePsychologistDataField setPsychologist={setPartnerPsychologist} psychologist={partnerPsychologist} location={location} dontDisplay={psychologist} settingPartnerPsychologist={true}/>
                 </div>}
             {location && <DisplayLocationDetails location={location}/>}
             {client && <p>Client Details:</p>}
@@ -274,7 +278,7 @@ export function ShowAndChangeData({data, setData, alternative}){
 export function ClickCalendarEvent(calendarEvent){
     let choice;
     
-    if(calendarEvent.client == null){
+    if(calendarEvent.client == ""){
         choice = window.confirm(
         `
             Psychologist: ${calendarEvent.psychologist} \n

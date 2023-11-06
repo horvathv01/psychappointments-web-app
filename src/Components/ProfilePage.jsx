@@ -142,7 +142,8 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         return true;
     }
 
-    function handleChange(){
+    function handleChange(e){
+      e.preventDefault();
         if(!validateUserInput()){
             return;
         }
@@ -335,7 +336,7 @@ export function EditProfile({user, saveProfile, loggedIn, registeredByUser, newR
         </Form.Group>
       </Row>
 
-      <Button onClick={(e) => e.preventDefault()} variant="primary" type="submit">
+      <Button onClick={(e) => handleChange(e)} variant="primary" type="submit">
         Save
       </Button>
     </Form>

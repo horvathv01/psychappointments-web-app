@@ -26,7 +26,7 @@ export default function Locations(){
         if(location != null && startDate != "" && endDate != ""){
 
             let url = new URL(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session/location`);
-            url.searchParams.append("locationId", location.id.toString());
+            url.searchParams.append("id", location.id.toString());
             url.searchParams.append("startDate", `${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`);
             url.searchParams.append("endDate", `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()}`);
         
@@ -40,7 +40,6 @@ export default function Locations(){
             })
             .then(response => response.json())
             .then(info => {
-                console.log(info);
                 setEvents(info);
             });
             
@@ -75,7 +74,7 @@ export default function Locations(){
                 return session.clientName;
             } else {
                 //all other cases: show psychologist's name
-                return session.psychologistName;
+                return session.psychologistName + (session.blank && " blank");
             }
         }
 

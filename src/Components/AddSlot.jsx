@@ -122,7 +122,7 @@ export default function AddSlot(){
             <p>Choose Location: </p>
             <GetLocations setLocation={setLocation}/>
             {psychologist == null ? <p>Choose Psychologist: </p> : <p>Psychologist: </p>}
-            <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location}/>
+            {user && user.type == "Psychologist" ? <div><p>{user.name}</p></div> : <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />}
             <p>Choose Date: </p>
             <ChooseDate setDate={handleDateChange}/>
             <p>Input slot start: </p>
