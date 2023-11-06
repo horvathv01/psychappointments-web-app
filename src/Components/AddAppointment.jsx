@@ -141,7 +141,7 @@ export default function AddAppointment(){
                     <p>Location: </p>
                     <GetLocations setLocation={setLocation} />
                     <p>Psychologist: </p>
-                    <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />
+                    {user && user.type == "Psychologist" ? <div><p>{user.name}</p></div> : <GeneratePsychologistDataField setPsychologist={setPsychologist} psychologist={psychologist} location={location} />}
                     <p>Client: </p>
                     {user && <GenerateClientDataFields user={user} client={client} setClient={setClient}/>}
                     <p>Select date:</p>
@@ -205,7 +205,7 @@ export function GetLocations({setLocation}){
     )
 }
 
-export function GeneratePsychologistDataField({psychologist, setPsychologist, location, dontDisplay}){
+export function GeneratePsychologistDataField({psychologist, setPsychologist, location, dontDisplay, settingPartnerPsychologist}){
     const {user, retreiveUser} = useContext(UserContext);
     const [allPsychologists, setAllPsychologists] = useState([]);
 
@@ -214,7 +214,7 @@ export function GeneratePsychologistDataField({psychologist, setPsychologist, lo
         if(retreivedUser == null){
             navigate("/loginfirst");
         }
-        if(retreivedUser.type != "Psychologist"){
+        if(retreivedUser.type != "Psychologist" || settingPartnerPsychologist){
             fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/allpsychologists`, {
                 method: 'GET',
                 headers: {

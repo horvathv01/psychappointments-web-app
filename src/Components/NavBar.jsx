@@ -58,7 +58,7 @@ export default function NavBar(){
               <Nav className="ms-auto">
                 {user == null ? <Nav.Link href="/login">Log In</Nav.Link> : null}
                 {user && user.type != "Admin" && user.type != "Manager" && <Nav.Link href="/calendar">My Events</Nav.Link>}
-                {user && user.type != "Client" && <Nav.Link href="/locations">Locations</Nav.Link>}
+                {user && <Nav.Link href="/locations">Locations</Nav.Link>}
                 <Nav.Link href="/financials">Financials</Nav.Link>
                 {user && user.type === "Admin" ? <Nav.Link href="/admin">Admin page</Nav.Link> : null}
                 {user && user.type === "Manager" ? <Nav.Link href="/manager">Management</Nav.Link> : null}
