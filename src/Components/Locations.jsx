@@ -74,7 +74,7 @@ export default function Locations(){
                 return session.clientName;
             } else {
                 //all other cases: show psychologist's name
-                return session.psychologistName + (session.blank && " blank");
+                return session.psychologistName + (session.blank ? " BLANK" : " OCCUPIED");
             }
         }
 
