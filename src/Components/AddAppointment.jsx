@@ -26,7 +26,9 @@ export default function AddAppointment(){
             navigate("/loginfirst");
         }
         if (retreivedUser.type == "Client"){
-            setClient(retreivedUser);
+          setClient(retreivedUser);
+        } else if(retreivedUser.type == "Psychologist"){
+          setPsychologist(retreivedUser);
         }
     }, [user, client]);
 
@@ -44,7 +46,7 @@ export default function AddAppointment(){
             url.searchParams.append("startDate", date);
             url.searchParams.append("endDate", endDate);
             
-            console.log(url.toString());
+            //console.log(url.toString());
             
             fetch(url.toString(), {
                 method: 'GET',
@@ -55,7 +57,7 @@ export default function AddAppointment(){
             })
             .then(response => response.json())
             .then(info => {
-                console.log(info);
+                //console.log(info);
                 setAllSlots(info);
             });
         }
@@ -70,24 +72,31 @@ export default function AddAppointment(){
 
     function validate(){
         if(!location){
+          window.alert("Location is missing.");
             return false;
         }
         if(!psychologist){
+          window.alert("Psychologist is missing.");
             return false;
         }
         if(!client){
+          window.alert("Client is missing.");
             return false;
         }
         if(!date){
+          window.alert("Date is missing.");
             return false;
         }
         if(!sessionStart){
+          window.alert("Session start is missing.");
             return false;
         }
         if(!sessionEnd){
+          window.alert("Session end is missing.");
             return false;
         }
         if(!description){
+          window.alert("Description is missing.");
             return false;
         }
         if(price > 0)
@@ -118,7 +127,7 @@ export default function AddAppointment(){
         };
 
         //console.log(sessionDTO);
-        
+        //console.log(client);
         fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/session`, {
             method: 'POST',
             headers: {
@@ -129,7 +138,6 @@ export default function AddAppointment(){
         })
         .then(response => response.text())
         .then(info => window.alert(info));
-
 
     }
         
@@ -342,7 +350,7 @@ export function GenerateClientDataFields({user, client, setClient}){
     }
 
     function getUserData(email){
-        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/email/${email}`, {
+        fetch(`${ServerURLAndPort.host}://${ServerURLAndPort.url}:${ServerURLAndPort.port}/user/booking/${email}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
